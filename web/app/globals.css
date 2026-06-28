@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-mono: "Roboto Mono", "Fira Code", ui-monospace, monospace;
+}
+
+html, body {
+  background: #0B0F19;
+  color: #C8D6E5;
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* griglia HUD di fondo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(39, 50, 74, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39, 50, 74, 0.25) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* scanline animata */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(rgba(0, 229, 199, 0.5), transparent 60%);
+  mix-blend-mode: screen;
+  opacity: 0.05;
+  animation: scan 4s ease-in-out infinite;
+}
+
+.panel {
+  background: linear-gradient(180deg, #0F1525 0%, #0C1120 100%);
+  border: 1px solid #1B2436;
+  border-radius: 6px;
+}
+
+.panel-glow {
+  box-shadow: 0 0 0 1px rgba(0, 229, 199, 0.15), 0 0 24px rgba(0, 229, 199, 0.06);
+}
+
+.hatch {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: #5A6B86;
+  text-transform: uppercase;
+}
+
+.corner {
+  position: relative;
+}
+.corner::before, .corner::after {
+  content: "";
+  position: absolute;
+  width: 10px; height: 10px;
+  border-color: #00E5C7;
+  border-style: solid;
+  opacity: 0.7;
+}
+.corner::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.corner::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0B0F19; }
+::-webkit-scrollbar-thumb { background: #27324A; border-radius: 4px; }
+
+/* leaflet override dark */
+.leaflet-container { background: #0B0F19 !important; outline: none; }
+.leaflet-control-attribution { background: rgba(11,15,25,0.7) !important; color: #5A6B86 !important; }
+.leaflet-control-attribution a { color: #0A8A7A !important; }

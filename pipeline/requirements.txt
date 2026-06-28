@@ -1,0 +1,7 @@
+xarray>=2024.3.0
+cfgrib>=0.9.11
+eccodes>=1.7.0
+ecmwflibs>=0.6.3   # binari ecCodes nativi (necessari su Windows / Python recenti)
+dask>=2024.1       # lettura lazy GRIB via open_mfdataset
+numpy>=1.26
+pandas>=2.2
