@@ -1,42 +1,40 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./app/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-  ],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        bg: "#0B0F19",
-        panel: "#0F1525",
-        grid: "#1B2436",
-        line: "#27324A",
-        cyan: "#00E5C7",
-        cyandim: "#0A8A7A",
-        lime: "#7CFF6B",
-        amber: "#FFB020",
-        orange: "#FF7A18",
-        red: "#FF2E4D",
-        muted: "#5A6B86",
-        ink: "#C8D6E5",
+        // --- Palette istituzionale Galverla / GAL Versante Laziale del PNA ---
+        ink: "#17161A",        // testo principale
+        brand: "#135B4C",      // verde scuro brand
+        accent: "#00E66E",     // verde acceso
+        slate: "#3B6675",      // ardesia
+        mint: "#D3E5D9",       // verde pallido
+        cloud: "#ECF1F5",      // grigio chiaro sezioni
+        paper: "#FFFFFF",
+        // --- scala calore (per la temperatura, leggibile su chiaro) ---
+        warm1: "#F6C544",
+        warm2: "#F39237",
+        warm3: "#E4572E",
+        warm4: "#C81D25",
       },
       fontFamily: {
-        mono: ["var(--font-mono)", "Roboto Mono", "Fira Code", "monospace"],
+        display: ["var(--font-poppins)", "Poppins", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "sans-serif"],
       },
       boxShadow: {
-        hud: "0 0 0 1px rgba(0,229,199,0.15), 0 0 24px rgba(0,229,199,0.06)",
-        glow: "0 0 18px rgba(0,229,199,0.35)",
+        card: "0 1px 2px rgba(23,22,26,0.04), 0 8px 24px rgba(23,22,26,0.06)",
+        lift: "0 12px 40px rgba(19,91,76,0.12)",
       },
+      borderRadius: { xl2: "1.25rem" },
       keyframes: {
-        ticker: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
-        scan: { "0%,100%": { opacity: "0.04" }, "50%": { opacity: "0.10" } },
-        blink: { "0%,49%": { opacity: "1" }, "50%,100%": { opacity: "0.2" } },
+        countup: { from: { opacity: "0", transform: "translateY(6px)" }, to: { opacity: "1", transform: "none" } },
+        marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
       },
       animation: {
-        ticker: "ticker 38s linear infinite",
-        scan: "scan 4s ease-in-out infinite",
-        blink: "blink 1.1s step-end infinite",
+        countup: "countup .5s ease-out both",
+        marquee: "marquee 40s linear infinite",
       },
     },
   },

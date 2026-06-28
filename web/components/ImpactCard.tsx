@@ -1,42 +1,36 @@
 import type { ImpactValue } from "@/lib/impacts";
 
+const ICON: Record<string, string> = {
+  sonno: "🌙",
+  energia: "⚡",
+  acqua: "💧",
+  cibo: "🌾",
+};
+
 export default function ImpactCard({ impact }: { impact: ImpactValue }) {
-  const obs = impact.kind === "observation";
   return (
-    <div className="panel corner relative overflow-hidden p-3">
-      {/* gradiente anomalia su bordo sinistro */}
-      <div
-        className="absolute left-0 top-0 h-full w-[3px]"
-        style={{
-          background: obs
-            ? "linear-gradient(180deg,#00E5C7,#0A8A7A)"
-            : "linear-gradient(180deg,#FFB020,#FF7A18,#FF2E4D)",
-        }}
-      />
+    <div className="card flex flex-col p-5">
       <div className="flex items-center justify-between">
-        <span className="hatch">{impact.label}</span>
+        <span className="text-2xl" aria-hidden>{ICON[impact.key] ?? "•"}</span>
         <span
-          className={`rounded-sm px-1.5 py-0.5 text-[9px] font-bold tracking-widest ${
-            obs
-              ? "bg-cyan/10 text-cyan"
-              : "bg-amber/10 text-amber"
+          className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+            impact.measured ? "bg-brand/10 text-brand" : "bg-cloud text-slate"
           }`}
         >
-          {obs ? "◉ OSSERVAZIONE" : "≈ STIMA"}
+          {impact.measured ? "DATO OSSERVATO" : "STIMA"}
         </span>
       </div>
-
-      <div className="mt-2 flex items-baseline gap-1.5">
-        <span
-          className="text-3xl font-bold tabular-nums"
-          style={{ color: obs ? "#00E5C7" : "#FF7A18" }}
-        >
-          {impact.value}
-        </span>
-        <span className="text-[11px] text-muted">{impact.unit}</span>
-      </div>
-
-      <p className="mt-1 text-[10px] leading-tight text-muted">{impact.hint}</p>
+      <p className="mt-3 font-display text-sm font-semibold text-slate">{impact.label}</p>
+      <p className="mt-1 font-display text-3xl font-extrabold text-warm3">{impact.value}</p>
+      <p className="mt-2 flex-1 text-sm leading-snug text-ink/80">{impact.caption}</p>
+      <a
+        href={impact.source.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 text-[11px] text-slate underline-offset-2 hover:text-brand hover:underline"
+      >
+        Fonte: {impact.source.label}
+      </a>
     </div>
   );
 }

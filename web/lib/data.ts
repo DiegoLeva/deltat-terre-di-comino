@@ -3,15 +3,22 @@ import raw from "@/public/data/climate_data.json";
 
 export const CLIMATE = raw as unknown as ClimateData;
 
-/** Mock ridotto richiesto per la dropdown: Ripi, Alvito, Cassino, Frosinone. */
-export const MOCK_COMUNI = ["Ripi", "Alvito", "Cassino", "Frosinone"];
+/** Tutti i 32 comuni, ordinati alfabeticamente per la tendina. */
+export const COMUNI: Comune[] = [...CLIMATE.comuni].sort((a, b) =>
+  a.nome.localeCompare(b.nome, "it")
+);
+export const COMUNI_NAMES = COMUNI.map((c) => c.nome);
 
 export function getComune(nome: string): Comune {
-  return (
-    CLIMATE.comuni.find((c) => c.nome === nome) ??
-    CLIMATE.comuni.find((c) => MOCK_COMUNI.includes(c.nome)) ??
-    CLIMATE.comuni[0]
-  );
+  return CLIMATE.comuni.find((c) => c.nome === nome) ?? CLIMATE.comuni[0];
 }
 
-export const ALL_COMUNI = CLIMATE.comuni.map((c) => c.nome);
+/** Anno "oggi" globale = ultimo anno osservato C3S presente nei dati. */
+export const TODAY_YEAR = (() => {
+  const obs = CLIMATE.comuni[0].series.filter((p) => p.source === "era5");
+  return obs.length ? obs[obs.length - 1].year : 2022;
+})();
+
+export const YEAR_MIN = CLIMATE.meta.year_start;       // 1950
+export const PAESC_BASELINE_YEAR = CLIMATE.meta.paesc.baseline_year; // 2011
+export const PAESC = CLIMATE.meta.paesc;
