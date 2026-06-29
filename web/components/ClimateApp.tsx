@@ -41,7 +41,7 @@ export default function ClimateApp() {
       {/* ============ ESPLORA COMUNE ============ */}
       <section id="esplora" className="section">
         <div className="container-x">
-          <span className="eyebrow">Esplora · 32 comuni del distretto</span>
+          <span className="eyebrow">Esplora · I comuni del PAESC</span>
           <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
             Cerca il tuo comune
           </h2>

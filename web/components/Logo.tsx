@@ -12,7 +12,7 @@ export default function Logo({ height = 44 }: { height?: number }) {
       />
       <span className="hidden leading-tight sm:block">
         <span className="block font-display text-[15px] font-semibold text-ink">Clima Terre di Comino</span>
-        <span className="block text-[11px] font-medium text-slate">Osservatorio temperature · 32 comuni</span>
+        <span className="block text-[11px] font-medium text-slate">Osservatorio temperature · PAESC</span>
       </span>
     </a>
   );
