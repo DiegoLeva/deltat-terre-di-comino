@@ -143,10 +143,26 @@ def write_daily_files(obs_day: pd.DataFrame):
     print(f"[ok] giornalieri: {n} file -> {DAILY_DIR}/")
 
 
+ANN_STORICO = "annuale_storico.csv"
+DAY_STORICO = "giornalieri_storico.csv"
+
+
 def main():
     obs_ann = pd.read_csv(ANN_CSV)
     obs_mon = pd.read_csv(MON_CSV)
     obs_day = pd.read_csv(DAY_CSV)
+
+    # --- fusione con i dati STORICI (1961-..) se presenti ---
+    cols_ann = ["comune", "year", "t_mean", "tropical_nights", "heat_days"]
+    if os.path.exists(ANN_STORICO):
+        st_ann = pd.read_csv(ANN_STORICO)[cols_ann]
+        obs_ann = pd.concat([obs_ann[cols_ann], st_ann], ignore_index=True)
+        print(f"[storico] +{len(st_ann)} righe annuali storiche")
+    if os.path.exists(DAY_STORICO):
+        st_day = pd.read_csv(DAY_STORICO)[["comune", "date", "tmin", "tmax"]]
+        obs_day = pd.concat([obs_day[["comune", "date", "tmin", "tmax"]], st_day], ignore_index=True)
+        print(f"[storico] +{len(st_day)} righe giornaliere storiche")
+
     print(f"[era5] {len(obs_ann)} righe annuali, {len(obs_mon)} mensili, {len(obs_day)} giornaliere")
 
     out = {

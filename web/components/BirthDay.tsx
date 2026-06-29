@@ -18,10 +18,23 @@ const COMPARE_YEAR = "2025";
 export default function BirthDay({ slug, nome }: { slug: string; nome: string }) {
   const [day, setDay] = useState(15);
   const [month, setMonth] = useState(7);
-  const [year, setYear] = useState(2015);
+  const [year, setYear] = useState(1980);
   const [file, setFile] = useState<DailyFile | null>(null);
 
   useEffect(() => { setFile(null); loadDaily(slug).then(setFile); }, [slug]);
+
+  // tutti gli anni realmente disponibili nel file (storici + recenti)
+  const years = useMemo(() => {
+    if (!file) return [];
+    const s = new Set<number>();
+    for (const rec of Object.values(file.days)) for (const y of Object.keys(rec)) s.add(Number(y));
+    return [...s].sort((a, b) => a - b);
+  }, [file]);
+
+  // se l'anno scelto non è disponibile, ripiega sul primo disponibile
+  useEffect(() => {
+    if (years.length && !years.includes(year)) setYear(years[0]);
+  }, [years]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mmdd = `${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   const res = useMemo(() => {
@@ -52,11 +65,13 @@ export default function BirthDay({ slug, nome }: { slug: string; nome: string })
             </select>
             <select value={year} onChange={(e) => setYear(Number(e.target.value))}
               className="input w-24 px-2 py-2 text-sm">
-              {Array.from({ length: 14 }, (_, i) => 2011 + i).map((y) => <option key={y}>{y}</option>)}
+              {years.map((y) => <option key={y}>{y}</option>)}
             </select>
           </div>
           <p className="mt-3 text-xs text-slate">
-            I dati giorno per giorno partono dal 2011: scegli un anno dal 2011 in poi.
+            {years.length
+              ? `Anni disponibili: dal ${years[0]} al ${years[years.length - 1]}.`
+              : "Carico gli anni disponibili…"}
           </p>
         </div>
 
