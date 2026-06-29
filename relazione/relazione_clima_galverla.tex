@@ -49,7 +49,7 @@ GAL Versante Laziale del Parco Nazionale d'Abruzzo, Lazio e Molise}}
 \maketitle
 
 \begin{abstract}
-\noindent Quando si parla di cambiamento climatico l'attenzione cade quasi sempre sui grandi numeri planetari, su scenari lontani nel tempo o nello spazio. Eppure il riscaldamento è un fenomeno che si misura anche sotto casa, paese per paese. In queste pagine proviamo a guardarlo da vicino nel territorio del GAL Versante Laziale del PNALM --- trentadue comuni a cavallo fra la Val di Comino, la valle del Liri e le pendici delle Mainarde --- ricostruendo l'andamento delle temperature degli ultimi quindici anni a partire dai dati di rianalisi \textit{ERA5} del \textit{Copernicus Climate Change Service}. Il lavoro accompagna lo sviluppo di un'applicazione web divulgativa che permette a chiunque di interrogare il dato del proprio comune e di tradurlo in conseguenze concrete: notti senza riposo, bollette, acqua per i campi, raccolti. I risultati confermano, anche alla scala locale, ciò che la letteratura osserva alla scala continentale: un riscaldamento ormai strutturale, particolarmente marcato nei mesi caldi, con effetti che variano sensibilmente con l'altitudine.
+\noindent Quando si parla di cambiamento climatico l'attenzione cade quasi sempre sui grandi numeri planetari, su scenari lontani nel tempo o nello spazio. Eppure il riscaldamento è un fenomeno che si misura anche sotto casa, paese per paese. In queste pagine proviamo a guardarlo da vicino nel territorio del GAL Versante Laziale del PNALM --- trentadue comuni a cavallo fra la Val di Comino, la valle del Liri e le pendici delle Mainarde --- ricostruendo l'andamento delle temperature degli ultimi quindici anni a partire dai dati di rianalisi \textit{ERA5} del \textit{Copernicus Climate Change Service}. Il lavoro accompagna lo sviluppo di un'applicazione web divulgativa che permette a chiunque di interrogare il dato del proprio comune e di tradurlo in conseguenze concrete: notti senza riposo, bollette, acqua per i campi, raccolti. I risultati confermano, anche alla scala locale, ciò che la letteratura osserva alla scala continentale: un riscaldamento ormai strutturale, particolarmente marcato nei mesi caldi, con effetti che variano sensibilmente con l'altitudine. Il confronto con i primi due decenni della serie ricostruita (1961--1980) quantifica per il distretto un riscaldamento medio di circa $+2{,}4\,^{\circ}$C, che nel mese di luglio supera i tre gradi e mezzo.
 \end{abstract}
 
 \vspace{0.3cm}
@@ -63,6 +63,8 @@ C'è un secondo aspetto, spesso trascurato: a scaldarsi di più sono proprio le 
 La tentazione, di fronte a una domanda del genere, sarebbe quella di andare a cercare la centralina meteo più vicina. È però la strada sbagliata: le serie termometriche al suolo soffrono di interruzioni storiche, spostamenti di sensori, urbanizzazione progressiva attorno alla stazione, e nei nostri comuni montani semplicemente non esistono con continuità sufficiente. Abbiamo quindi scelto la via della \textbf{rianalisi climatica}, cioè la ricostruzione fisica dello stato dell'atmosfera ottenuta facendo ``digerire'' a un modello meteorologico tutte le osservazioni disponibili.
 
 Nello specifico, l'ossatura del lavoro è il dataset \textbf{ERA5} prodotto dal Centro Europeo per le Previsioni Meteorologiche a Medio Termine (ECMWF) nell'ambito del Copernicus Climate Change Service \cite{hersbach2020, c3s}. ERA5 fornisce la temperatura a due metri dal suolo con cadenza oraria; nella sua declinazione ad alta risoluzione \textit{ERA5-Land} \cite{munoz2021} la maglia di calcolo scende a circa \SI{11}{\kilo\meter}. Per il nostro comprensorio abbiamo estratto la serie oraria della temperatura a due metri ($T_{2m}$) dal 2011 al 2025, più i primi mesi del 2026, ricavandone per ciascun comune gli indicatori annuali e mensili.
+
+A questo nucleo recente si aggiunge un secondo blocco di dati, di natura storica, scaricato per ricostruire il termine di paragone di lungo periodo. Per gli anni dal 1961 al 1980 abbiamo recuperato i campi di temperatura \emph{minima} e \emph{massima} giornaliera ($mn2t$, $mx2t$); per questi anni la temperatura media giornaliera è stata stimata come semisomma $\overline{T}_d = (T_{\min} + T_{\max})/2$, prassi consolidata nella climatologia quando si dispone soltanto degli estremi giornalieri. Il completamento dell'archivio fino al 1990 consentirà di adottare integralmente la normale trentennale standard.
 
 \subsection{Il nodo della risoluzione: stessa cella, paesi diversi}
 La griglia di rianalisi ha un limite intrinseco: una cella copre un'area di parecchi chilometri di lato e ne restituisce un valore medio. Comuni vicini ma a quote molto diverse --- si pensi a Cassino di fondovalle e a Terelle arroccata oltre i mille metri --- finiscono nella stessa cella e condividerebbero, di partenza, lo stesso numero. È un problema reale: la temperatura cambia con la quota in modo tutt'altro che trascurabile.
@@ -79,7 +81,7 @@ Per distinguere il segnale climatico dal rumore meteorologico di un singolo anno
 \Delta T_m = \overline{T}_{\text{recente},\,m} - \overline{T}_{\text{rif},\,m}.
 \end{equation}
 
-Va detto con onestà che il trentennio 1961--1990 non rientra nella finestra osservata di cui disponiamo a livello operativo: i file ERA5 che alimentano l'applicazione coprono il periodo 2011--2025. Per questo la nostra implementazione adotta un confronto interno, robusto perché basato esclusivamente su dato osservato, fra un \emph{periodo di riferimento} (la media 2011--2014) e un \emph{periodo recente} (la media 2022--2025). Lo scarto fra i due quadrienni misura quanto il clima si sia spostato nell'arco di un decennio, all'interno dello stesso strumento di misura e quindi senza discontinuità di metodo. Il confronto con la normale WMO 1961--1990 resta il quadro di riferimento concettuale, ed è perfettamente sostituibile nel motore di calcolo non appena si scarichino dal Copernicus i dati del trentennio storico.
+Adottiamo due termini di paragone complementari. Il primo, già pienamente disponibile, è il periodo \textbf{1961--1980}: venti anni di dato storico osservato, che rappresentano i primi due terzi della normale trentennale e ne costituiscono una solida approssimazione (il loro completamento al 1990 è in corso). Il secondo, usato nel confronto interattivo dell'applicazione, è un raffronto interno fra un \emph{periodo di riferimento} recente (la media 2011--2014) e un \emph{periodo recente} (la media 2022--2025): misura lo spostamento del clima nell'arco dell'ultimo decennio, all'interno dello stesso strumento di misura e quindi senza discontinuità di metodo. I due confronti rispondono a domande diverse --- ``quanto è cambiato in sessant'anni'' e ``quanto è cambiato in dieci'' --- e, come si vedrà, conducono entrambi alla stessa diagnosi.
 
 A monte, per smorzare l'oscillazione interannuale nelle serie lunghe, le temperature medie annue sono filtrate con una media mobile centrata a cinque anni:
 \begin{equation}
@@ -135,6 +137,38 @@ Agricoltura & $-5\%$ di resa cerealicola per \SI{1}{\celsius}; vite con maggiore
 \end{table}
 
 \section{Risultati per il comprensorio}
+\subsection{Sessant'anni di distanza: il confronto con il 1961--1980}
+La prospettiva più eloquente si ottiene allontanando lo sguardo fino agli anni Sessanta e Settanta. Confrontando la media dell'intero distretto nel ventennio storico \textbf{1961--1980} con quella del periodo recente \textbf{2011--2025}, la temperatura media annua passa da \SI{10.49}{\celsius} a \SI{12.93}{\celsius}: un incremento di \textbf{$+2{,}44$~\gradi} in circa sei decenni. Non è una stima modellistica ma il confronto diretto fra due blocchi di dato osservato. Il riscaldamento si concentra nella stagione calda: in \textbf{luglio} la media di comprensorio sale da \SI{19.0}{\celsius} a \SI{22.7}{\celsius}, ben \textbf{$+3{,}7$~\gradi}.
+
+La Tabella~\ref{tab:storico} riporta il dettaglio per un campione di comuni rappresentativi delle diverse fasce altimetriche. Si conferma quanto già osservato: l'entità del riscaldamento è notevolmente omogenea sul territorio (ovunque attorno ai $+2{,}4 / +2{,}5$~\gradi), mentre la temperatura assoluta resta governata dalla quota, dai fondovalle del Cassinate fino ai mille metri di Terelle.
+
+\begin{table}[H]
+\centering
+\caption{Temperatura media annua: ventennio storico 1961--1980 a confronto con il periodo recente 2011--2025.}
+\label{tab:storico}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{Y C C C C}
+\toprule
+\textbf{Comune} & \textbf{Quota (m)} & \textbf{1961--1980 (\gradi)} & \textbf{2011--2025 (\gradi)} & \textbf{Variazione (\gradi)} \\
+\midrule
+Pontecorvo & 60 & 13,99 & 16,46 & $+2{,}47$ \\
+Cervaro & 145 & 12,70 & 14,99 & $+2{,}29$ \\
+Arpino & 450 & 9,60 & 12,06 & $+2{,}46$ \\
+Vicalvi & 460 & 8,71 & 11,20 & $+2{,}49$ \\
+Alvito & 480 & 8,58 & 11,07 & $+2{,}49$ \\
+Atina & 490 & 11,20 & 13,67 & $+2{,}47$ \\
+Veroli & 570 & 8,82 & 11,28 & $+2{,}46$ \\
+Picinisco & 725 & 6,99 & 9,48 & $+2{,}49$ \\
+Acquafondata & 926 & 7,62 & 9,91 & $+2{,}29$ \\
+Terelle & 1050 & 7,56 & 10,03 & $+2{,}47$ \\
+\midrule
+\textbf{Media distretto} & --- & \textbf{10,49} & \textbf{12,93} & \textbf{$+2{,}44$} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Il confronto interno fra quadrienni recenti, descritto nel seguito, restituisce un valore più contenuto ($+1{,}2$~\gradi) semplicemente perché misura una finestra temporale molto più breve --- dieci anni invece di sessanta. La direzione, però, è la stessa, e l'accelerazione recente del segnale è coerente con la letteratura.
+
 \subsection{Il segnale mensile: l'esempio di Atina}
 Conviene partire da un comune rappresentativo della Val di Comino. La Figura~\ref{fig:atina} scompone mese per mese lo scarto fra la media 2022--2025 e quella 2011--2014 per Atina (\SI{490}{\meter} s.l.m.). Il quadro è netto: l'estate è la stagione che si scalda di più, con luglio in testa a $+3{,}1$~\gradi, mentre alcuni mesi di transizione restano sostanzialmente stabili o addirittura in lieve flessione --- è il caso di aprile e novembre, dove la variabilità di due soli quadrienni può ancora produrre piccoli segni negativi. Mediando sull'anno, lo scarto si attesta su $+1{,}2$~\gradi.
 
@@ -253,7 +287,7 @@ In secondo luogo, il riscaldamento medio appare quasi uniforme sul comprensorio.
 In terzo luogo, la risoluzione della rianalisi resta dell'ordine della decina di chilometri: il downscaling altimetrico recupera l'effetto dominante della quota, ma non i micro-climi di versante, le inversioni termiche di conca o l'isola di calore dei centri abitati maggiori. Per un'analisi di dettaglio a scala di quartiere occorrerebbero dati e modelli di altra natura.
 
 \section{Conclusioni}
-Il quadro che emerge è privo di ambiguità. Nei trentadue comuni del GAL Versante Laziale del PNALM la temperatura media degli ultimi anni è più alta di oltre un grado rispetto all'inizio del decennio scorso, con punte estive che sfiorano i tre gradi e mezzo. Non si tratta di episodi meteorologici passeggeri ma dello spostamento della normale climatica: le isoterme del nostro Appennino si sono mosse, e con esse la vita quotidiana di chi lo abita --- le notti d'estate, i consumi, l'acqua dei campi.
+Il quadro che emerge è privo di ambiguità. Nei trentadue comuni del GAL Versante Laziale del PNALM la temperatura media è salita di circa \textbf{due gradi e mezzo} rispetto al ventennio 1961--1980, con punte estive che in luglio superano i tre gradi e mezzo; e l'accelerazione prosegue, visto che oltre un grado di questo aumento si è consumato nel solo ultimo decennio. Non si tratta di episodi meteorologici passeggeri ma dello spostamento della normale climatica: le isoterme del nostro Appennino si sono mosse, e con esse la vita quotidiana di chi lo abita --- le notti d'estate, i consumi, l'acqua dei campi.
 
 L'applicazione che accompagna questa relazione non aggiunge un grado a quel riscaldamento, ma lo rende visibile e personale: traduce un'astrazione planetaria nel numero del proprio paese e nelle sue conseguenze tangibili. È, crediamo, il primo passo perché un dato diventi consapevolezza, e perché la consapevolezza diventi, nelle scelte di un territorio, azione.
 
