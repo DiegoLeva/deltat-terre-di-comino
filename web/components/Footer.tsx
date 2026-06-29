@@ -1,13 +1,13 @@
-import { GoatMark } from "./Logo";
+/* eslint-disable @next/next/no-img-element */
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#e7ede9] bg-ink text-paper/90">
+    <footer className="border-t border-[#e6e9df] bg-ink text-paper/90">
       <div className="container-x grid gap-8 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-paper/10">
-              <GoatMark className="h-6 w-6 text-accent" />
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-paper">
+              <img src="/brand/logo.png" alt="GAL Versante Laziale del PNA" className="h-9 w-auto" />
             </span>
             <span className="font-display font-semibold">Clima Terre di Comino</span>
           </div>

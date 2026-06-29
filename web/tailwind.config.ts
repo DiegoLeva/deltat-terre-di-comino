@@ -5,17 +5,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // --- Palette istituzionale Galverla / GAL Versante Laziale del PNA ---
-        ink: "#17161A",        // testo principale
-        brand: "#135B4C",      // verde scuro brand
-        accent: "#00E66E",     // verde acceso
-        slate: "#3B6675",      // ardesia
-        mint: "#D3E5D9",       // verde pallido
-        cloud: "#ECF1F5",      // grigio chiaro sezioni
+        // --- Palette dal logo GAL Versante Laziale del PNA (camoscio/sole/crema) ---
+        ink: "#1C2B20",        // testo principale (verde quasi nero)
+        brand: "#2E7D43",      // verde foresta (camoscio)
+        brandDark: "#1E5E34",
+        accent: "#3FAE5A",     // verde chiaro
+        gold: "#EAC23B",       // sole del logo
+        slate: "#5E6E62",      // grigio-verde testo secondario
+        mint: "#DCEBDD",       // verde pallido
+        cream: "#F5EFDC",      // crema sezioni
+        sand: "#EAE2C7",       // beige logo
+        cloud: "#F1F3EE",
         paper: "#FFFFFF",
-        // --- scala calore (per la temperatura, leggibile su chiaro) ---
-        warm1: "#F6C544",
-        warm2: "#F39237",
+        // --- scala calore (anomalia termica), blu->rosso ---
+        cold: "#3E7CB1",
+        warm0: "#9FC79B",
+        warm1: "#F0C84B",
+        warm2: "#EE9B3A",
         warm3: "#E4572E",
         warm4: "#C81D25",
       },
