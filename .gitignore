@@ -37,3 +37,7 @@ Thumbs.db
 /climate_data.json
 /deltaT-terre-di-comino.zip
 pipeline/giornalieri_era5.csv
+pipeline/grib_storico/*.grib
+pipeline/annuale_storico.csv
+pipeline/mensile_storico.csv
+pipeline/giornalieri_storico.csv
