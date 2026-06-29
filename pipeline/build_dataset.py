@@ -25,7 +25,7 @@ MON_CSV = "mensili_era5.csv"
 OUT_JSON = os.path.join("..", "web", "public", "data", "climate_data.json")
 
 BASE_PERIOD = (2011, 2014)   # periodo di riferimento ("il passato")
-RECENT_PERIOD = (2019, 2022) # periodo recente ("oggi")
+RECENT_PERIOD = (2022, 2025) # periodo recente ("oggi"), ultimi 4 anni pieni
 
 
 def warming_anomaly(year: int) -> float:
@@ -125,7 +125,7 @@ def main():
             "province": "Frosinone",
             "n_comuni": len(COMUNI),
             "year_start": YEAR_START, "year_end": YEAR_END,
-            "obs_start": 2011, "obs_end": 2022,
+            "obs_start": 2011, "obs_end": 2025,
             "source_dataset": "Copernicus Climate Change Service — ERA5 (ECMWF)",
             "lapse_rate_c_per_km": 6.5,
             "base_period": f"{BASE_PERIOD[0]}-{BASE_PERIOD[1]}",

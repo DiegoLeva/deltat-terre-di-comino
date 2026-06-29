@@ -112,7 +112,10 @@ def _annual_indicators(s: pd.Series) -> pd.DataFrame:
         tmin=("tmin", "mean"),
         tropical_nights=("tmin", lambda x: int((x > 20.0).sum())),
         heat_days=("tmax", lambda x: int((x > 30.0).sum())),  # giorni caldi Tmax>30°C
+        n_days=("tmean", "count"),
     ).reset_index()
+    # scarta gli anni incompleti (es. anno in corso): solo anni con copertura piena
+    out = out[out["n_days"] >= 350].drop(columns=["n_days"]).reset_index(drop=True)
     return out
 
 
