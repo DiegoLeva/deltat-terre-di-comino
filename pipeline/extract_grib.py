@@ -93,74 +93,81 @@ def _nearest_cell(t2m: xr.DataArray, lat: float, lon: float) -> xr.DataArray:
     return t2m.sel(latitude=lat, longitude=lon_q, method="nearest")
 
 
-def _annual_indicators(cell_hourly: xr.Series, lapse_corr: float) -> pd.DataFrame:
-    """
-    Da serie ORARIA di una cella -> indicatori annuali, applicando la correzione
-    di lapse-rate (offset costante in degC) prima di contare le soglie.
-    """
+def _prep_series(cell_hourly, lapse_corr: float) -> pd.Series:
+    """Serie ORARIA della cella -> pandas Series in degC corretta per quota."""
     s = cell_hourly.to_series()
     s.index = pd.to_datetime(s.index)
-    s = s + lapse_corr  # downscaling altimetrico: shift verso la quota del comune
+    return s + lapse_corr  # downscaling altimetrico verso la quota del comune
 
-    # aggregazioni giornaliere
+
+def _annual_indicators(s: pd.Series) -> pd.DataFrame:
+    """Indicatori annuali da serie oraria già corretta per quota."""
     daily_min = s.resample("1D").min()
     daily_max = s.resample("1D").max()
     daily_mean = s.resample("1D").mean()
-
-    df = pd.DataFrame({
-        "tmin": daily_min,
-        "tmax": daily_max,
-        "tmean": daily_mean,
-    })
+    df = pd.DataFrame({"tmin": daily_min, "tmax": daily_max, "tmean": daily_mean})
     df["year"] = df.index.year
-
     out = df.groupby("year").agg(
         t_mean=("tmean", "mean"),
         tmin=("tmin", "mean"),
         tropical_nights=("tmin", lambda x: int((x > 20.0).sum())),
-        heat_days=("tmax", lambda x: int((x > 35.0).sum())),
+        heat_days=("tmax", lambda x: int((x > 30.0).sum())),  # giorni caldi Tmax>30°C
     ).reset_index()
     return out
 
 
-def extract(grib_dir: str) -> pd.DataFrame:
+def _monthly_means(s: pd.Series) -> pd.DataFrame:
+    """Media mensile (year, month, t_mean) dalla serie oraria corretta per quota."""
+    m = s.resample("MS").mean()
+    df = pd.DataFrame({"t_mean": m})
+    df["year"] = df.index.year
+    df["month"] = df.index.month
+    return df.dropna(subset=["t_mean"]).reset_index(drop=True)[["year", "month", "t_mean"]]
+
+
+def extract(grib_dir: str):
+    """Ritorna (annuale_df, mensile_df) reali per i 32 comuni."""
     t2m = _open_t2m(grib_dir)
-    rows = []
+    ann_rows, mon_rows = [], []
     for c in COMUNI:
         cell = _nearest_cell(t2m, c["lat"], c["lon"])
         orog = _cell_orography(t2m, c["lat"], c["lon"])
-        lapse_corr = -LAPSE_RATE * (c["quota_m"] - orog)  # degC
+        lapse_corr = -LAPSE_RATE * (c["quota_m"] - orog)
+        s = _prep_series(cell, lapse_corr)
 
-        ind = _annual_indicators(cell, lapse_corr)
-        # il resample giornaliero crea righe per gli anni SENZA dati nel GRIB
-        # (gap temporali): scartale, restano solo gli anni realmente osservati.
+        ind = _annual_indicators(s)
         ind = ind.dropna(subset=["t_mean"]).reset_index(drop=True)
-        ind = ind[ind["t_mean"].notna()]
         ind.insert(0, "comune", c["nome"])
         ind["quota_m"] = c["quota_m"]
-        ind["cell_orog_m"] = orog
         ind["lapse_corr_c"] = round(lapse_corr, 3)
         ind["source"] = "era5"
-        ind["projected"] = False
-        rows.append(ind)
+        ann_rows.append(ind)
 
-    df = pd.concat(rows, ignore_index=True)
-    # arrotondamenti
-    df["t_mean"] = df["t_mean"].round(2)
-    df["tmin"] = df["tmin"].round(2)
-    return df
+        mon = _monthly_means(s)
+        mon.insert(0, "comune", c["nome"])
+        mon_rows.append(mon)
+
+    ann = pd.concat(ann_rows, ignore_index=True)
+    ann["t_mean"] = ann["t_mean"].round(2)
+    ann["tmin"] = ann["tmin"].round(2)
+    mon = pd.concat(mon_rows, ignore_index=True)
+    mon["t_mean"] = mon["t_mean"].round(2)
+    return ann, mon
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--grib-dir", default="grib")
     ap.add_argument("--out", default="osservazioni_era5.csv")
+    ap.add_argument("--out-monthly", default="mensili_era5.csv")
     args = ap.parse_args()
 
-    df = extract(args.grib_dir)
-    df.to_csv(args.out, index=False)
-    print(f"[ok] {len(df)} righe -> {args.out}")
-    print(df.head(12).to_string(index=False))
+    ann, mon = extract(args.grib_dir)
+    ann.to_csv(args.out, index=False)
+    mon.to_csv(args.out_monthly, index=False)
+    print(f"[ok] annuale: {len(ann)} righe -> {args.out}")
+    print(f"[ok] mensile: {len(mon)} righe -> {args.out_monthly}")
+    print(ann.head(6).to_string(index=False))
 
 
 if __name__ == "__main__":
