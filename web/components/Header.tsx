@@ -2,8 +2,8 @@ import Logo from "./Logo";
 
 export default function Header() {
   const links = [
-    { href: "#calcolatore", label: "Calcolatore ΔT" },
-    { href: "#nascita", label: "Alla tua nascita" },
+    { href: "#esplora", label: "Esplora" },
+    { href: "#cosa-comporta", label: "Cosa comporta" },
     { href: "#paesc", label: "Dal 2011" },
     { href: "#mappa", label: "Mappa" },
   ];
@@ -17,7 +17,7 @@ export default function Header() {
               {l.label}
             </a>
           ))}
-          <a href="#calcolatore" className="btn-primary px-4 py-2 text-sm">Inizia</a>
+          <a href="#esplora" className="btn-primary px-4 py-2 text-sm">Inizia</a>
         </nav>
       </div>
     </header>

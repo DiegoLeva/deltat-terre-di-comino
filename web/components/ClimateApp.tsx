@@ -1,217 +1,186 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
-import { COMUNI_NAMES, TODAY_YEAR, YEAR_MIN, getComune } from "@/lib/data";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { COMUNI_NAMES, TODAY_YEAR, YEAR_MIN, getComune, META } from "@/lib/data";
+import { MESI_LONG } from "@/lib/types";
 import type { ImpactValue } from "@/lib/impacts";
 import ImpactCard from "./ImpactCard";
 import Thermometer from "./Thermometer";
-import SeriesPanel from "./SeriesPanel";
+import MonthlyChart from "./MonthlyChart";
 import WarmingStripes from "./WarmingStripes";
+import SeriesPanel from "./SeriesPanel";
 import GisMap from "./GisMap";
 
 interface DeltaApi {
-  comune: string;
-  baselineYear: number;
-  todayYear: number;
-  deltaT_c: number;
-  tBaseline_c: number;
-  tToday_c: number;
-  tropicalNightsDelta: number;
-  impacts: ImpactValue[];
+  comune: string; baselineYear: number; todayYear: number; deltaT_c: number;
+  tBaseline_c: number; tToday_c: number; tropicalNightsDelta: number; impacts: ImpactValue[];
 }
+const fetchDelta = (c: string, b: number) =>
+  fetch(`/api/delta?comune=${encodeURIComponent(c)}&baseline=${b}`).then((r) => r.json() as Promise<DeltaApi>);
 
-async function fetchDelta(comune: string, baseline: number): Promise<DeltaApi> {
-  const r = await fetch(`/api/delta?comune=${encodeURIComponent(comune)}&baseline=${baseline}`);
-  if (!r.ok) throw new Error("api");
-  return r.json();
-}
-
-const heatColor = (d: number) =>
-  d >= 2 ? "#C81D25" : d >= 1.5 ? "#E4572E" : d >= 0.8 ? "#F39237" : "#135B4C";
+const heat = (d: number) => (d >= 2 ? "#C81D25" : d >= 1.5 ? "#E4572E" : d >= 0.8 ? "#EE9B3A" : "#2E7D43");
 
 export default function ClimateApp() {
-  const [comune, setComune] = useState("Cassino");
-  const [baseline, setBaseline] = useState(1990);
+  const [comune, setComune] = useState("Atina");
+  const [baseline, setBaseline] = useState(2011);
   const [res, setRes] = useState<DeltaApi | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [birth, setBirth] = useState(1985);
-  const [birthRes, setBirthRes] = useState<DeltaApi | null>(null);
-  const [birthLoading, setBirthLoading] = useState(false);
+  const c = useMemo(() => getComune(comune), [comune]);
+  const m = c.monthly;
+  const meseMax = MESI_LONG[(m.scarto_max.m || 1) - 1];
 
-  const runMain = useCallback(async (c: string, b: number) => {
+  const run = useCallback(async (cn: string, b: number) => {
     setLoading(true);
-    try { setRes(await fetchDelta(c, b)); } finally { setLoading(false); }
+    try { setRes(await fetchDelta(cn, b)); } finally { setLoading(false); }
   }, []);
-
-  const runBirth = useCallback(async (c: string, b: number) => {
-    setBirthLoading(true);
-    try { setBirthRes(await fetchDelta(c, b)); } finally { setBirthLoading(false); }
-  }, []);
-
-  useEffect(() => { runMain("Cassino", 1990); }, [runMain]);
-
-  const comuneObj = getComune(comune);
+  useEffect(() => { run(comune, baseline); }, [comune, baseline, run]);
 
   return (
     <>
-      {/* ================= CALCOLATORE PRINCIPALE ================= */}
-      <section id="calcolatore" className="section bg-cloud/60">
+      {/* ============ ESPLORA COMUNE ============ */}
+      <section id="esplora" className="section">
         <div className="container-x">
-          <span className="eyebrow">Calcolatore</span>
+          <span className="eyebrow">Esplora · 32 comuni del distretto</span>
           <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
-            Quanto è cresciuta la temperatura, da un anno a oggi?
+            Cerca il tuo comune
           </h2>
-          <p className="mt-3 max-w-2xl text-slate">
-            Scegli un comune e l'anno di riferimento. Interroghiamo i dati Copernicus C3S e ti
-            mostriamo l'aumento fino al {TODAY_YEAR}, l'ultimo anno osservato.
-          </p>
 
-          <div className="mt-7 grid gap-6 lg:grid-cols-[360px_1fr]">
-            {/* form */}
-            <div className="card h-fit p-6">
-              <label className="mb-1 block text-sm font-semibold text-ink">Comune</label>
-              <select className="input mb-4 w-full px-3 py-2.5 text-sm" value={comune}
-                onChange={(e) => setComune(e.target.value)}>
-                {COMUNI_NAMES.map((n) => <option key={n} value={n}>{n}</option>)}
-              </select>
-
-              <label className="mb-1 block text-sm font-semibold text-ink">
-                Anno di riferimento: <span className="text-brand">{baseline}</span>
-              </label>
-              <input type="range" min={YEAR_MIN} max={TODAY_YEAR - 1} value={baseline}
-                onChange={(e) => setBaseline(Number(e.target.value))}
-                className="mb-1 w-full accent-brand" />
-              <div className="mb-4 flex justify-between text-[11px] text-slate">
-                <span>{YEAR_MIN}</span><span>2011 PAESC</span><span>{TODAY_YEAR - 1}</span>
-              </div>
-
-              <button onClick={() => runMain(comune, baseline)} disabled={loading}
-                className="btn-primary w-full px-4 py-3 text-sm disabled:opacity-60">
-                {loading ? "Interrogazione dati Copernicus C3S…" : "Calcola l'aumento →"}
-              </button>
-            </div>
-
-            {/* risultato */}
-            <ResultPanel res={res} loading={loading} />
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <label className="text-sm font-semibold text-ink">Comune:</label>
+            <select value={comune} onChange={(e) => setComune(e.target.value)}
+              className="input min-w-[260px] px-3 py-2.5 text-sm font-medium">
+              {COMUNI_NAMES.map((n) => <option key={n} value={n}>{n}</option>)}
+            </select>
+            <span className="text-sm text-slate">{c.quota_m} m s.l.m.</span>
           </div>
-        </div>
-      </section>
 
-      {/* ================= GRAFICO + STRISCE ================= */}
-      <section id="serie" className="section">
-        <div className="container-x grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-          <SeriesPanel comune={comuneObj} />
-          <div className="flex flex-col gap-6">
-            <WarmingStripes comune={comuneObj} />
-            <div className="card p-5">
-              <h3 className="font-display text-sm font-bold text-ink">Perché proprio qui?</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate">
-                Il bacino del Mediterraneo si scalda circa il <b className="text-warm3">20% più in fretta</b>
-                {" "}della media globale (MedECC 2020). Le Terre di Comino, tra Appennino e valli,
-                vedono inverni più miti e ondate di calore estive sempre più lunghe.
+          {/* headline */}
+          <div className="mt-7 grid gap-6 lg:grid-cols-3">
+            <div className="card p-6">
+              <p className="text-sm font-semibold text-slate">Scarto medio annuo</p>
+              <p className="mt-1 font-display text-5xl font-extrabold text-warm3">
+                +{m.scarto_medio.toFixed(1)}°C
+              </p>
+              <p className="mt-2 text-sm text-slate">
+                media {m.recent_period} rispetto al periodo {m.base_period}
               </p>
             </div>
+            <div className="card p-6">
+              <p className="text-sm font-semibold text-slate">Mese di scarto massimo</p>
+              <p className="mt-1 font-display text-3xl font-extrabold capitalize text-ink">{meseMax}</p>
+              <p className="mt-1 font-display text-2xl font-bold text-warm3">+{m.scarto_max.value.toFixed(1)}°C</p>
+              <p className="mt-2 text-sm text-slate">il mese che si è scaldato di più</p>
+            </div>
+            <div className="card p-6">
+              <p className="text-sm font-semibold text-slate">Notti tropicali (Tmin&gt;20°C)</p>
+              <p className="mt-1 font-display text-3xl font-extrabold text-ink">
+                {c.tn_2011} <span className="text-slate">→</span> <span className="text-warm3">{c.tn_today}</span>
+              </p>
+              <p className="mt-2 text-sm text-slate">dal 2011 al {c.today_year}, all'anno</p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <MonthlyChart monthly={m} />
+            <WarmingStripes comune={c} />
+          </div>
+
+          {/* editoriale dinamico */}
+          <div className="mt-6 card p-6">
+            <p className="text-base leading-relaxed text-ink/85">
+              A <b>{c.nome}</b> ({c.quota_m} m s.l.m.) il riscaldamento si vede soprattutto in{" "}
+              <b className="capitalize">{meseMax}</b>, più caldo di <b>+{m.scarto_max.value.toFixed(1)}°C</b>{" "}
+              rispetto al periodo {m.base_period}. È un segnale d'area: il riscaldamento cambia poco da
+              comune a comune, ma <b>quanto caldo fa in assoluto</b> dipende dalla quota. Le notti tropicali —
+              quelle in cui la minima non scende sotto i 20°C e si dorme male — qui sono passate da{" "}
+              <b>{c.tn_2011}</b> a <b>{c.tn_today}</b> all'anno. Come in tutta Italia, sono le zone più
+              fredde e interne dell'Appennino a scaldarsi più in fretta.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ================= COM'ERA ALLA TUA NASCITA ================= */}
-      <section id="nascita" className="section bg-mint/40">
+      {/* ============ SERIE STORICA ============ */}
+      <section className="section bg-cream/50">
         <div className="container-x">
-          <span className="eyebrow">La tua vita, il tuo clima</span>
+          <span className="eyebrow">La serie storica</span>
           <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
-            Che clima c'era quando sei nato/a?
+            Sessant'anni di temperature, a {c.nome}
           </h2>
           <p className="mt-3 max-w-2xl text-slate">
-            Inserisci il tuo anno di nascita: confrontiamo il clima di allora a {comune} con quello di oggi.
+            La temperatura media annua, con le osservazioni Copernicus {META.obs_start}–{META.obs_end} e la
+            ricostruzione del contesto storico. La striscia qui sopra riassume lo stesso dato a colori.
           </p>
-
-          <div className="mt-7 grid gap-6 lg:grid-cols-[360px_1fr]">
-            <div className="card h-fit p-6">
-              <label className="mb-1 block text-sm font-semibold text-ink">Anno di nascita</label>
-              <input type="number" min={YEAR_MIN} max={TODAY_YEAR - 1} value={birth}
-                onChange={(e) => setBirth(Math.min(TODAY_YEAR - 1, Math.max(YEAR_MIN, Number(e.target.value) || YEAR_MIN)))}
-                className="input mb-4 w-full px-3 py-2.5 text-sm" />
-              <p className="mb-4 text-xs text-slate">Comune: <b className="text-ink">{comune}</b> (cambialo nel calcolatore sopra)</p>
-              <button onClick={() => runBirth(comune, birth)} disabled={birthLoading}
-                className="btn-primary w-full px-4 py-3 text-sm disabled:opacity-60">
-                {birthLoading ? "Calcolo…" : "Confronta nascita → oggi →"}
-              </button>
-            </div>
-
-            <div>
-              {birthRes && !birthLoading && (
-                <div className="card mb-6 p-6">
-                  <p className="text-lg leading-relaxed text-ink">
-                    Quando sei nato/a nel <b>{birthRes.baselineYear}</b>, a <b>{comune}</b> la
-                    temperatura media era <b className="text-brand">{birthRes.tBaseline_c}°C</b>.
-                    Oggi ({birthRes.todayYear}) è <b style={{ color: heatColor(birthRes.deltaT_c) }}>
-                    {birthRes.tToday_c}°C</b>: nell'arco della tua vita è cresciuta di{" "}
-                    <b style={{ color: heatColor(birthRes.deltaT_c) }}>
-                      +{birthRes.deltaT_c.toFixed(1)}°C
-                    </b>.
-                  </p>
-                </div>
-              )}
-              <ResultPanel res={birthRes} loading={birthLoading} hideHeadline />
-            </div>
-          </div>
+          <div className="mt-6"><SeriesPanel comune={c} /></div>
         </div>
       </section>
 
-      {/* ================= MAPPA ================= */}
-      <section id="mappa" className="section">
+      {/* ============ COSA COMPORTA ============ */}
+      <section id="cosa-comporta" className="section">
+        <div className="container-x">
+          <span className="eyebrow">Cosa comporta</span>
+          <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
+            Anche pochi gradi cambiano la vita di tutti i giorni
+          </h2>
+          <p className="mt-3 max-w-2xl text-slate">
+            Scegli da quale anno partire: a {c.nome}, ecco quanto è cresciuta la temperatura fino al{" "}
+            {TODAY_YEAR} e cosa significa per sonno, energia, acqua e cibo.
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <label className="text-sm font-semibold text-ink">
+              Dal: <span className="text-brand">{baseline}</span>
+            </label>
+            <input type="range" min={YEAR_MIN} max={TODAY_YEAR - 1} value={baseline}
+              onChange={(e) => setBaseline(Number(e.target.value))}
+              className="w-64 accent-[#2E7D43]" />
+            <div className="flex gap-2 text-xs">
+              {[1961, 1990, 2011].map((y) => (
+                <button key={y} onClick={() => setBaseline(y)}
+                  className={`rounded-full border px-3 py-1 ${baseline === y ? "border-brand bg-mint text-brand" : "border-[#d6ddcf] text-slate"}`}>
+                  {y === 2011 ? "2011 (PAESC)" : y}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {res && !loading && (
+            <div className="mt-6 card p-6">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-slate">{c.nome} · dal {res.baselineYear} al {res.todayYear}</p>
+                  <p className="font-display text-6xl font-extrabold leading-none" style={{ color: heat(res.deltaT_c) }}>
+                    +{res.deltaT_c.toFixed(1)}<span className="text-3xl text-slate"> °C</span>
+                  </p>
+                  <p className="mt-1 text-sm text-slate">da {res.tBaseline_c}°C a {res.tToday_c}°C di media annua</p>
+                </div>
+                <div className="w-full max-w-xs"><Thermometer deltaT={res.deltaT_c} /></div>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {(res?.impacts ?? []).map((imp) => <ImpactCard key={imp.key} impact={imp} />)}
+          </div>
+          <p className="mt-3 text-xs text-slate">
+            Le card “dato osservato” sono conteggi reali dai dati Copernicus C3S; le “stima” derivano dal
+            ΔT con fattori medi da fonti ufficiali (clicca le fonti).
+          </p>
+        </div>
+      </section>
+
+      {/* ============ MAPPA ============ */}
+      <section id="mappa" className="section bg-cream/50">
         <div className="container-x">
           <span className="eyebrow">Territorio</span>
-          <h2 className="mt-2 font-display text-3xl font-extrabold text-ink md:text-4xl">
-            I 32 comuni del distretto
-          </h2>
+          <h2 className="mt-2 font-display text-3xl font-extrabold text-ink md:text-4xl">I 32 comuni</h2>
           <p className="mt-3 max-w-2xl text-slate">
-            Stessa cella satellitare, quote diverse: la mappa evidenzia il comune selezionato.
+            Risoluzione dei dati ~25 km: in montagna più comuni condividono la stessa cella, distinti per
+            quota con il downscaling altimetrico. La mappa evidenzia il comune selezionato.
           </p>
-          <div className="mt-7"><GisMap selected={comune} /></div>
+          <div className="mt-6"><GisMap selected={comune} /></div>
         </div>
       </section>
     </>
-  );
-}
-
-/* ---- pannello risultato riusato dai due calcolatori ---- */
-function ResultPanel({ res, loading, hideHeadline }: { res: DeltaApi | null; loading: boolean; hideHeadline?: boolean }) {
-  if (loading) {
-    return <div className="card grid h-64 place-items-center text-slate">Interrogazione dati Copernicus C3S…</div>;
-  }
-  if (!res) {
-    return <div className="card grid h-64 place-items-center text-slate">Premi “Calcola” per vedere il risultato.</div>;
-  }
-  const col = heatColor(res.deltaT_c);
-  return (
-    <div>
-      {!hideHeadline && (
-        <div className="card mb-6 p-6">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold text-slate">
-                {res.comune} · dal {res.baselineYear} al {res.todayYear}
-              </p>
-              <p className="font-display text-6xl font-extrabold leading-none" style={{ color: col }}>
-                +{res.deltaT_c.toFixed(1)}<span className="text-3xl text-slate"> °C</span>
-              </p>
-              <p className="mt-1 text-sm text-slate">
-                da {res.tBaseline_c}°C a {res.tToday_c}°C di temperatura media annua
-              </p>
-            </div>
-            <div className="w-full max-w-xs"><Thermometer deltaT={res.deltaT_c} /></div>
-          </div>
-        </div>
-      )}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {res.impacts.map((imp) => <ImpactCard key={imp.key} impact={imp} />)}
-      </div>
-      <p className="mt-3 text-xs text-slate">
-        Le card “stima” derivano dal ΔT con fattori da fonti ufficiali (clicca le fonti). Le card
-        “dato osservato” sono conteggi reali dai dati Copernicus C3S.
-      </p>
-    </div>
   );
 }

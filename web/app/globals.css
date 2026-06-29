@@ -7,32 +7,19 @@
   --font-poppins: "Poppins", system-ui, sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background: #ffffff;
-  color: #17161a;
+  color: #1c2b20;
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, .font-display {
-  font-family: var(--font-poppins);
-}
+h1, h2, h3, h4, .font-display { font-family: var(--font-poppins); }
 
-.container-x {
-  width: 100%;
-  max-width: 1180px;
-  margin-inline: auto;
-  padding-inline: 1.25rem;
-}
-
-/* sezione alternata */
-.section {
-  padding-block: clamp(3rem, 7vw, 6rem);
-}
+.container-x { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: 1.25rem; }
+.section { padding-block: clamp(3rem, 7vw, 6rem); }
 
 .eyebrow {
   font-family: var(--font-poppins);
@@ -40,41 +27,39 @@ h1, h2, h3, h4, .font-display {
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #135b4c;
+  color: #2e7d43;
 }
 
 .card {
   background: #fff;
-  border: 1px solid #e7ede9;
+  border: 1px solid #e6e9df;
   border-radius: 1.25rem;
-  box-shadow: 0 1px 2px rgba(23, 22, 26, 0.04), 0 8px 24px rgba(23, 22, 26, 0.06);
+  box-shadow: 0 1px 2px rgba(28, 43, 32, 0.04), 0 10px 30px rgba(28, 43, 32, 0.06);
 }
 
 .btn-primary {
-  background: #135b4c;
+  background: #2e7d43;
   color: #fff;
   font-family: var(--font-poppins);
   font-weight: 600;
   border-radius: 999px;
   transition: transform 0.15s ease, background 0.15s ease;
 }
-.btn-primary:hover { background: #0e4a3e; transform: translateY(-1px); }
+.btn-primary:hover { background: #1e5e34; transform: translateY(-1px); }
 
 .input {
-  border: 1px solid #d7e0da;
+  border: 1px solid #d6ddcf;
   border-radius: 0.75rem;
   background: #fff;
-  color: #17161a;
+  color: #1c2b20;
   font-family: var(--font-inter);
 }
-.input:focus { outline: none; border-color: #135b4c; box-shadow: 0 0 0 3px rgba(0, 230, 110, 0.15); }
+.input:focus { outline: none; border-color: #2e7d43; box-shadow: 0 0 0 3px rgba(63, 174, 90, 0.18); }
 
-/* termometro / barra calore */
-.heat-track { background: linear-gradient(90deg, #d3e5d9, #f6c544, #f39237, #e4572e, #c81d25); }
+.heat-track { background: linear-gradient(90deg, #3e7cb1, #9fc79b, #f0c84b, #ee9b3a, #e4572e, #c81d25); }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background: #cfd9d4; border-radius: 6px; }
+::-webkit-scrollbar-thumb { background: #cdd6c8; border-radius: 6px; }
 
-/* leaflet light */
-.leaflet-container { background: #eef3f0 !important; font-family: var(--font-inter) !important; }
+.leaflet-container { background: #eef1ea !important; font-family: var(--font-inter) !important; }
 .leaflet-control-attribution { font-size: 10px !important; }
