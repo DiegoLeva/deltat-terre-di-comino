@@ -13,7 +13,7 @@ Per ogni comune produce:
 """
 
 from __future__ import annotations
-import json, os
+import json, os, re, unicodedata
 import numpy as np
 import pandas as pd
 
@@ -22,7 +22,15 @@ from comuni import COMUNI, baseline_t
 YEAR_START, YEAR_END = 1950, 2030
 ANN_CSV = "osservazioni_era5.csv"
 MON_CSV = "mensili_era5.csv"
+DAY_CSV = "giornalieri_era5.csv"
 OUT_JSON = os.path.join("..", "web", "public", "data", "climate_data.json")
+DAILY_DIR = os.path.join("..", "web", "public", "data", "daily")
+
+
+def slugify(nome: str) -> str:
+    s = unicodedata.normalize("NFKD", nome).encode("ascii", "ignore").decode()
+    s = re.sub(r"[^a-zA-Z0-9]+", "-", s).strip("-").lower()
+    return s
 
 BASE_PERIOD = (2011, 2014)   # periodo di riferimento ("il passato")
 RECENT_PERIOD = (2022, 2025) # periodo recente ("oggi"), ultimi 4 anni pieni
@@ -103,7 +111,8 @@ def build_comune(c, obs_ann, obs_mon) -> dict:
     today = max(y for y in by_year if by_year[y]["source"] == "era5")
 
     return {
-        "nome": c["nome"], "lat": c["lat"], "lon": c["lon"], "quota_m": c["quota_m"],
+        "nome": c["nome"], "slug": slugify(c["nome"]),
+        "lat": c["lat"], "lon": c["lon"], "quota_m": c["quota_m"],
         "t_baseline_1961_1990": round(baseline_t(c["quota_m"]), 2),
         "today_year": today,
         "delta_2011_today": round(by_year[today]["t_mean_smooth"] - by_year[2011]["t_mean_smooth"], 2),
@@ -114,10 +123,31 @@ def build_comune(c, obs_ann, obs_mon) -> dict:
     }
 
 
+def write_daily_files(obs_day: pd.DataFrame):
+    """Un file JSON per comune: { "MM-DD": { "YYYY": [tmin, tmax] } } (per la funzione
+    'giorno di nascita vs oggi'). Solo anni pieni con dato osservato."""
+    os.makedirs(DAILY_DIR, exist_ok=True)
+    obs_day = obs_day.copy()
+    obs_day["year"] = obs_day["date"].str[:4]
+    obs_day["mmdd"] = obs_day["date"].str[5:]
+    n = 0
+    for c in COMUNI:
+        sub = obs_day[obs_day["comune"] == c["nome"]]
+        days: dict = {}
+        for _, r in sub.iterrows():
+            days.setdefault(r["mmdd"], {})[r["year"]] = [r["tmin"], r["tmax"]]
+        path = os.path.join(DAILY_DIR, f"{slugify(c['nome'])}.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"nome": c["nome"], "days": days}, f, ensure_ascii=False, separators=(",", ":"))
+        n += 1
+    print(f"[ok] giornalieri: {n} file -> {DAILY_DIR}/")
+
+
 def main():
     obs_ann = pd.read_csv(ANN_CSV)
     obs_mon = pd.read_csv(MON_CSV)
-    print(f"[era5] {len(obs_ann)} righe annuali, {len(obs_mon)} righe mensili")
+    obs_day = pd.read_csv(DAY_CSV)
+    print(f"[era5] {len(obs_ann)} righe annuali, {len(obs_mon)} mensili, {len(obs_day)} giornaliere")
 
     out = {
         "meta": {
@@ -140,6 +170,8 @@ def main():
     with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
     print(f"[ok] {OUT_JSON} ({os.path.getsize(OUT_JSON)/1024:.1f} KB, {len(out['comuni'])} comuni)")
+
+    write_daily_files(obs_day)
 
 
 if __name__ == "__main__":

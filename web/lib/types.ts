@@ -27,6 +27,7 @@ export interface Monthly {
 
 export interface Comune {
   nome: string;
+  slug: string;
   lat: number;
   lon: number;
   quota_m: number;

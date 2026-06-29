@@ -27,12 +27,11 @@ function shape(comune: Comune) {
 function TT({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
-  const kind = d.projected ? "proiezione 2026-2030" : d.src === "era5" ? "osservato (Copernicus C3S)" : "ricostruzione modello";
+  const kind = d.projected ? "stima per i prossimi anni" : d.src === "era5" ? "dato misurato" : "ricostruzione del passato";
   return (
     <div className="card px-3 py-2 text-xs">
       <div className="font-semibold text-ink">Anno {label}</div>
       <div className="text-slate">Temperatura media: <b className="text-ink">{d.t}°C</b></div>
-      <div className="text-slate">media mobile 5 anni: {d.smooth}°C</div>
       <div className="mt-1 text-brand">{kind}</div>
     </div>
   );
@@ -55,7 +54,7 @@ export default function SeriesPanel({ comune }: { comune: Comune }) {
       </div>
 
       <ResponsiveContainer width="100%" height={280}>
-        <ComposedChart data={data} margin={{ top: 10, right: 10, bottom: 0, left: -16 }}>
+        <ComposedChart data={data} margin={{ top: 10, right: 12, bottom: 0, left: 6 }}>
           <defs>
             <linearGradient id="gObs" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#135B4C" stopOpacity={0.18} />
@@ -64,13 +63,14 @@ export default function SeriesPanel({ comune }: { comune: Comune }) {
           </defs>
           <CartesianGrid stroke="#eef3f0" />
           <XAxis dataKey="year" tick={{ fill: "#3B6675", fontSize: 11 }} stroke="#dbe4df"
-                 ticks={[1950, 1970, 1990, 2011, 2022, 2030]} />
+                 ticks={[1950, 1970, 1990, 2011, 2025]} />
           <YAxis tick={{ fill: "#3B6675", fontSize: 11 }} stroke="#dbe4df"
-                 domain={["dataMin - 0.4", "dataMax + 0.4"]} unit="°" width={44} />
+                 domain={[(min: number) => Math.floor(min - 0.5), (max: number) => Math.ceil(max + 0.5)]}
+                 allowDecimals={false} tickFormatter={(v: number) => `${Math.round(v)}°`} width={40} />
           <Tooltip content={<TT />} />
           <ReferenceLine x={2011} stroke="#3B6675" strokeDasharray="4 4"
-            label={{ value: "baseline PAESC", fill: "#3B6675", fontSize: 10, position: "insideTopLeft" }} />
-          <ReferenceLine x={2022} stroke="#9fb0aa" strokeDasharray="3 3"
+            label={{ value: "2011", fill: "#3B6675", fontSize: 10, position: "insideTopLeft" }} />
+          <ReferenceLine x={2025} stroke="#9fb0aa" strokeDasharray="3 3"
             label={{ value: "oggi", fill: "#3B6675", fontSize: 10, position: "top" }} />
           <Area dataKey="obs" stroke="none" fill="url(#gObs)" isAnimationActive={false} />
           <Line dataKey="back" stroke="#9fb0aa" strokeWidth={2} dot={false} connectNulls isAnimationActive={false} />
@@ -80,9 +80,9 @@ export default function SeriesPanel({ comune }: { comune: Comune }) {
       </ResponsiveContainer>
 
       <p className="mt-2 border-t border-[#eef3f0] pt-2 text-xs leading-snug text-slate">
-        <b>Nota.</b> La griglia Copernicus ERA5 (0,25° ≈ 25 km) raggruppa più comuni nella stessa cella.
-        Per distinguerli applichiamo un downscaling per quota (−6,5 °C/km): così Cassino (45 m) e
-        Picinisco (725 m), pur nella stessa cella, hanno valori e conteggi diversi e realistici.
+        La linea verde è la temperatura davvero misurata dai satelliti negli ultimi anni; in grigio la
+        ricostruzione del passato e in arancione la stima per i prossimi anni. I valori sono corretti
+        in base all'altitudine di ogni paese.
       </p>
     </div>
   );

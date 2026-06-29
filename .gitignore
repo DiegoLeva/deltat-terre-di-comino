@@ -36,3 +36,4 @@ Thumbs.db
 /build_dataset.py
 /climate_data.json
 /deltaT-terre-di-comino.zip
+pipeline/giornalieri_era5.csv

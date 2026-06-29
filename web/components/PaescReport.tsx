@@ -21,7 +21,7 @@ export default function PaescReport() {
   return (
     <section id="paesc" className="section bg-cloud/60">
       <div className="container-x">
-        <span className="eyebrow">Resoconto dal 2011 · baseline PAESC</span>
+        <span className="eyebrow">Il piano per il clima del distretto · dal 2011</span>
         <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
           Dieci anni di PAESC: dove siamo
         </h2>

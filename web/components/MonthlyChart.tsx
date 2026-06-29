@@ -20,10 +20,10 @@ function TT({ active, payload }: any) {
   return (
     <div className="card px-3 py-2 text-xs">
       <div className="font-semibold capitalize text-ink">{MESI_LONG[d.m - 1]}</div>
-      <div className="text-slate">{d.base_period}: <b>{d.baseline}°C</b></div>
-      <div className="text-slate">{d.recent_period}: <b>{d.recent}°C</b></div>
+      <div className="text-slate">una decina di anni fa: <b>{d.baseline}°C</b></div>
+      <div className="text-slate">oggi: <b>{d.recent}°C</b></div>
       <div className="mt-1 font-semibold" style={{ color: scartoColor(d.scarto) }}>
-        scarto {d.scarto >= 0 ? "+" : ""}{d.scarto}°C
+        {d.scarto >= 0 ? "+" : ""}{d.scarto}°C
       </div>
     </div>
   );
@@ -40,14 +40,15 @@ export default function MonthlyChart({ monthly }: { monthly: Monthly }) {
   return (
     <div className="card p-5">
       <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="font-display text-lg font-bold text-ink">Quanto si è scaldato ogni mese</h3>
-        <p className="text-xs text-slate">scarto °C · {monthly.recent_period} rispetto a {monthly.base_period}</p>
+        <h3 className="font-display text-lg font-bold text-ink">Quanto fa più caldo, mese per mese</h3>
+        <p className="text-xs text-slate">gradi in più rispetto a una decina di anni fa</p>
       </div>
       <ResponsiveContainer width="100%" height={260}>
-        <ComposedChart data={data} margin={{ top: 16, right: 8, bottom: 0, left: -20 }}>
+        <ComposedChart data={data} margin={{ top: 16, right: 10, bottom: 0, left: -8 }}>
           <CartesianGrid stroke="#eef1ea" vertical={false} />
-          <XAxis dataKey="name" tick={{ fill: "#5E6E62", fontSize: 11 }} stroke="#dde3d8" />
-          <YAxis tick={{ fill: "#5E6E62", fontSize: 11 }} stroke="#dde3d8" unit="°" width={42} />
+          <XAxis dataKey="name" tick={{ fill: "#5E6E62", fontSize: 11 }} stroke="#dde3d8" interval={0} />
+          <YAxis tick={{ fill: "#5E6E62", fontSize: 11 }} stroke="#dde3d8" width={38}
+                 tickFormatter={(v: number) => `${v > 0 ? "+" : ""}${v}°`} />
           <Tooltip content={<TT />} cursor={{ fill: "rgba(46,125,67,0.05)" }} />
           <ReferenceLine y={monthly.scarto_medio} stroke="#2E7D43" strokeDasharray="5 4"
             label={{ value: `media +${monthly.scarto_medio}°`, fill: "#2E7D43", fontSize: 10, position: "right" }} />
@@ -58,8 +59,8 @@ export default function MonthlyChart({ monthly }: { monthly: Monthly }) {
         </ComposedChart>
       </ResponsiveContainer>
       <p className="mt-2 text-xs text-slate">
-        Ogni barra è un mese: di quanto è più calda la media {monthly.recent_period} rispetto al
-        {" "}periodo di riferimento {monthly.base_period}. I mesi freddi tendono a scaldarsi di più.
+        Ogni barra è un mese e mostra di quanti gradi è più caldo oggi rispetto a una decina di anni fa.
+        Sono soprattutto i mesi caldi a salire: l'estate è la stagione che cambia di più.
       </p>
     </div>
   );

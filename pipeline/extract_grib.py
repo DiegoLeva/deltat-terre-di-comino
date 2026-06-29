@@ -128,10 +128,19 @@ def _monthly_means(s: pd.Series) -> pd.DataFrame:
     return df.dropna(subset=["t_mean"]).reset_index(drop=True)[["year", "month", "t_mean"]]
 
 
+def _daily_minmax(s: pd.Series) -> pd.DataFrame:
+    """Minima e massima GIORNALIERA (date, tmin, tmax) dalla serie oraria corretta."""
+    g = s.resample("1D")
+    df = pd.DataFrame({"tmin": g.min(), "tmax": g.max()}).dropna()
+    df = df.reset_index().rename(columns={"index": "date"})
+    df["date"] = pd.to_datetime(df.iloc[:, 0]).dt.strftime("%Y-%m-%d")
+    return df[["date", "tmin", "tmax"]]
+
+
 def extract(grib_dir: str):
-    """Ritorna (annuale_df, mensile_df) reali per i 32 comuni."""
+    """Ritorna (annuale_df, mensile_df, giornaliero_df) reali per i 32 comuni."""
     t2m = _open_t2m(grib_dir)
-    ann_rows, mon_rows = [], []
+    ann_rows, mon_rows, day_rows = [], [], []
     for c in COMUNI:
         cell = _nearest_cell(t2m, c["lat"], c["lon"])
         orog = _cell_orography(t2m, c["lat"], c["lon"])
@@ -150,12 +159,19 @@ def extract(grib_dir: str):
         mon.insert(0, "comune", c["nome"])
         mon_rows.append(mon)
 
+        day = _daily_minmax(s)
+        day.insert(0, "comune", c["nome"])
+        day_rows.append(day)
+
     ann = pd.concat(ann_rows, ignore_index=True)
     ann["t_mean"] = ann["t_mean"].round(2)
     ann["tmin"] = ann["tmin"].round(2)
     mon = pd.concat(mon_rows, ignore_index=True)
     mon["t_mean"] = mon["t_mean"].round(2)
-    return ann, mon
+    day = pd.concat(day_rows, ignore_index=True)
+    day["tmin"] = day["tmin"].round(1)
+    day["tmax"] = day["tmax"].round(1)
+    return ann, mon, day
 
 
 def main():
@@ -163,13 +179,16 @@ def main():
     ap.add_argument("--grib-dir", default="grib")
     ap.add_argument("--out", default="osservazioni_era5.csv")
     ap.add_argument("--out-monthly", default="mensili_era5.csv")
+    ap.add_argument("--out-daily", default="giornalieri_era5.csv")
     args = ap.parse_args()
 
-    ann, mon = extract(args.grib_dir)
+    ann, mon, day = extract(args.grib_dir)
     ann.to_csv(args.out, index=False)
     mon.to_csv(args.out_monthly, index=False)
+    day.to_csv(args.out_daily, index=False)
     print(f"[ok] annuale: {len(ann)} righe -> {args.out}")
     print(f"[ok] mensile: {len(mon)} righe -> {args.out_monthly}")
+    print(f"[ok] giornaliero: {len(day)} righe -> {args.out_daily}")
     print(ann.head(6).to_string(index=False))
 
 

@@ -34,8 +34,8 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-paper/10 py-4 text-center text-xs text-paper/50">
-        Dati a fini divulgativi. ΔT da rianalisi ERA5; le stime d'impatto usano fattori medi da
-        letteratura ufficiale. © {new Date().getFullYear()} Terre di Comino Smart Land.
+        Dati a fini divulgativi, basati sulle rilevazioni satellitari Copernicus ERA5. Le stime d'impatto
+        usano valori medi da fonti ufficiali. © {new Date().getFullYear()} Terre di Comino.
       </div>
     </footer>
   );

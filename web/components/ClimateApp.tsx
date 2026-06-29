@@ -8,6 +8,7 @@ import Thermometer from "./Thermometer";
 import MonthlyChart from "./MonthlyChart";
 import WarmingStripes from "./WarmingStripes";
 import SeriesPanel from "./SeriesPanel";
+import BirthDay from "./BirthDay";
 import GisMap from "./GisMap";
 
 interface DeltaApi {
@@ -57,26 +58,26 @@ export default function ClimateApp() {
           {/* headline */}
           <div className="mt-7 grid gap-6 lg:grid-cols-3">
             <div className="card p-6">
-              <p className="text-sm font-semibold text-slate">Scarto medio annuo</p>
+              <p className="text-sm font-semibold text-slate">Quanto fa più caldo</p>
               <p className="mt-1 font-display text-5xl font-extrabold text-warm3">
                 +{m.scarto_medio.toFixed(1)}°C
               </p>
               <p className="mt-2 text-sm text-slate">
-                media {m.recent_period} rispetto al periodo {m.base_period}
+                in media nell'anno, rispetto a una decina di anni fa
               </p>
             </div>
             <div className="card p-6">
-              <p className="text-sm font-semibold text-slate">Mese di scarto massimo</p>
+              <p className="text-sm font-semibold text-slate">Il mese più cambiato</p>
               <p className="mt-1 font-display text-3xl font-extrabold capitalize text-ink">{meseMax}</p>
               <p className="mt-1 font-display text-2xl font-bold text-warm3">+{m.scarto_max.value.toFixed(1)}°C</p>
               <p className="mt-2 text-sm text-slate">il mese che si è scaldato di più</p>
             </div>
             <div className="card p-6">
-              <p className="text-sm font-semibold text-slate">Notti tropicali (Tmin&gt;20°C)</p>
+              <p className="text-sm font-semibold text-slate">Notti senza riposo</p>
               <p className="mt-1 font-display text-3xl font-extrabold text-ink">
                 {c.tn_2011} <span className="text-slate">→</span> <span className="text-warm3">{c.tn_today}</span>
               </p>
-              <p className="mt-2 text-sm text-slate">dal 2011 al {c.today_year}, all'anno</p>
+              <p className="mt-2 text-sm text-slate">notti afose all'anno (oltre 20°C di notte), dal 2011 a oggi</p>
             </div>
           </div>
 
@@ -88,13 +89,13 @@ export default function ClimateApp() {
           {/* editoriale dinamico */}
           <div className="mt-6 card p-6">
             <p className="text-base leading-relaxed text-ink/85">
-              A <b>{c.nome}</b> ({c.quota_m} m s.l.m.) il riscaldamento si vede soprattutto in{" "}
-              <b className="capitalize">{meseMax}</b>, più caldo di <b>+{m.scarto_max.value.toFixed(1)}°C</b>{" "}
-              rispetto al periodo {m.base_period}. È un segnale d'area: il riscaldamento cambia poco da
-              comune a comune, ma <b>quanto caldo fa in assoluto</b> dipende dalla quota. Le notti tropicali —
-              quelle in cui la minima non scende sotto i 20°C e si dorme male — qui sono passate da{" "}
-              <b>{c.tn_2011}</b> a <b>{c.tn_today}</b> all'anno. Come in tutta Italia, sono le zone più
-              fredde e interne dell'Appennino a scaldarsi più in fretta.
+              A <b>{c.nome}</b> ({c.quota_m} metri di altitudine) il caldo in più si sente soprattutto in{" "}
+              <b className="capitalize">{meseMax}</b>, con <b>+{m.scarto_max.value.toFixed(1)}°C</b>{" "}
+              rispetto a una decina di anni fa. L'aumento è simile in tutti i paesi del distretto; quello
+              che cambia davvero da un paese all'altro è <b>quanto caldo fa in assoluto</b>, e dipende
+              dall'altitudine. Le notti afose — quelle in cui non si scende sotto i 20°C e si dorme male —
+              qui sono passate da <b>{c.tn_2011}</b> a <b>{c.tn_today}</b> all'anno. Come in tutta Italia,
+              sono i paesi più alti e freddi dell'Appennino a scaldarsi più in fretta.
             </p>
           </div>
         </div>
@@ -163,14 +164,29 @@ export default function ClimateApp() {
             {(res?.impacts ?? []).map((imp) => <ImpactCard key={imp.key} impact={imp} />)}
           </div>
           <p className="mt-3 text-xs text-slate">
-            Le card “dato osservato” sono conteggi reali dai dati Copernicus C3S; le “stima” derivano dal
-            ΔT con fattori medi da fonti ufficiali (clicca le fonti).
+            Le schede “dato osservato” sono conteggi reali dai satelliti; le “stima” sono calcolate
+            dall'aumento di temperatura usando dati ufficiali (clicca le fonti).
           </p>
         </div>
       </section>
 
+      {/* ============ IL GIORNO IN CUI SEI NATO ============ */}
+      <section id="nascita" className="section bg-cream/50">
+        <div className="container-x">
+          <span className="eyebrow">Il giorno in cui sei nato</span>
+          <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
+            Che tempo faceva il giorno della tua nascita?
+          </h2>
+          <p className="mt-3 max-w-2xl text-slate">
+            Scegli la tua data: confrontiamo la minima e la massima di quel giorno a {comune} con lo
+            stesso giorno di oggi. (Per cambiare paese usa il menu in alto.)
+          </p>
+          <div className="mt-6"><BirthDay slug={c.slug} nome={c.nome} /></div>
+        </div>
+      </section>
+
       {/* ============ MAPPA ============ */}
-      <section id="mappa" className="section bg-cream/50">
+      <section id="mappa" className="section">
         <div className="container-x">
           <span className="eyebrow">Territorio</span>
           <h2 className="mt-2 font-display text-3xl font-extrabold text-ink md:text-4xl">I 32 comuni</h2>

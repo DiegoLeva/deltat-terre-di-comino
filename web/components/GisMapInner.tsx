@@ -30,7 +30,7 @@ export default function GisMapInner({ selected }: { selected: string }) {
             }}>
             <Tooltip direction="top" offset={[0, -6]} opacity={1}>
               <span style={{ fontSize: 12 }}>
-                <b>{c.nome}</b> · {c.quota_m} m — scarto {c.monthly.scarto_medio >= 0 ? "+" : ""}{c.monthly.scarto_medio}°C
+                <b>{c.nome}</b> · {c.quota_m} m — {c.monthly.scarto_medio >= 0 ? "+" : ""}{c.monthly.scarto_medio}°C in più
               </span>
             </Tooltip>
           </CircleMarker>

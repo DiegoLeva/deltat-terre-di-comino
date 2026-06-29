@@ -4,7 +4,7 @@ export default function Header() {
   const links = [
     { href: "#esplora", label: "Esplora" },
     { href: "#cosa-comporta", label: "Cosa comporta" },
-    { href: "#paesc", label: "Dal 2011" },
+    { href: "#nascita", label: "La tua nascita" },
     { href: "#mappa", label: "Mappa" },
   ];
   return (
