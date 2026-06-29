@@ -22,6 +22,7 @@ pipeline/grib/*.grib
 pipeline/grib/*.grb
 *.idx
 pipeline/osservazioni_era5.csv
+pipeline/mensili_era5.csv
 
 # --- OS ---
 .DS_Store
