@@ -9,6 +9,9 @@ import MonthlyChart from "./MonthlyChart";
 import WarmingStripes from "./WarmingStripes";
 import SeriesPanel from "./SeriesPanel";
 import BirthDay from "./BirthDay";
+import Projection2050 from "./Projection2050";
+import Ranking from "./Ranking";
+import ShareCard from "./ShareCard";
 import GisMap from "./GisMap";
 
 interface DeltaApi {
@@ -98,6 +101,37 @@ export default function ClimateApp() {
               sono i paesi più alti e freddi dell'Appennino a scaldarsi più in fretta.
             </p>
           </div>
+
+          <div className="mt-6"><ShareCard comune={c} /></div>
+        </div>
+      </section>
+
+      {/* ============ NEL 2050 ============ */}
+      <section id="futuro" className="section bg-cream/50">
+        <div className="container-x">
+          <span className="eyebrow">Uno sguardo al futuro</span>
+          <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
+            E nel 2050, se non cambia nulla?
+          </h2>
+          <p className="mt-3 max-w-2xl text-slate">
+            Proiettando in avanti il riscaldamento già osservato, ecco che clima potrebbe avere {comune}
+            {" "}fra venticinque anni.
+          </p>
+          <div className="mt-6"><Projection2050 comune={c} /></div>
+        </div>
+      </section>
+
+      {/* ============ CLASSIFICA ============ */}
+      <section id="classifica" className="section">
+        <div className="container-x">
+          <span className="eyebrow">La classifica</span>
+          <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold text-ink md:text-4xl">
+            Dove si soffre di più il caldo di notte
+          </h2>
+          <p className="mt-3 max-w-2xl text-slate">
+            I 32 comuni del distretto a confronto. Tocca un comune per analizzarlo in dettaglio.
+          </p>
+          <div className="mt-6"><Ranking selected={comune} onSelect={setComune} /></div>
         </div>
       </section>
 

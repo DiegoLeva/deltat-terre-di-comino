@@ -3,9 +3,10 @@ import Logo from "./Logo";
 export default function Header() {
   const links = [
     { href: "#esplora", label: "Esplora" },
+    { href: "#futuro", label: "Nel 2050" },
+    { href: "#classifica", label: "Classifica" },
     { href: "#cosa-comporta", label: "Cosa comporta" },
     { href: "#nascita", label: "La tua nascita" },
-    { href: "#mappa", label: "Mappa" },
   ];
   return (
     <header className="sticky top-0 z-50 border-b border-[#e7ede9] bg-paper/85 backdrop-blur">

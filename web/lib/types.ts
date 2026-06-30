@@ -36,6 +36,7 @@ export interface Comune {
   delta_2011_today: number;
   tn_2011: number;
   tn_today: number;
+  proj_2050: { t_mean: number; tropical_nights: number; delta_today: number };
   monthly: Monthly;
   series: YearPoint[];
 }

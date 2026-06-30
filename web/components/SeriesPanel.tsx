@@ -63,7 +63,7 @@ export default function SeriesPanel({ comune }: { comune: Comune }) {
           </defs>
           <CartesianGrid stroke="#eef3f0" />
           <XAxis dataKey="year" tick={{ fill: "#3B6675", fontSize: 11 }} stroke="#dbe4df"
-                 ticks={[1950, 1970, 1990, 2011, 2025]} />
+                 ticks={[1950, 1980, 2011, 2025, 2050]} />
           <YAxis tick={{ fill: "#3B6675", fontSize: 11 }} stroke="#dbe4df"
                  domain={[(min: number) => Math.floor(min - 0.5), (max: number) => Math.ceil(max + 0.5)]}
                  allowDecimals={false} tickFormatter={(v: number) => `${Math.round(v)}°`} width={40} />

@@ -19,7 +19,7 @@ import pandas as pd
 
 from comuni import COMUNI, baseline_t
 
-YEAR_START, YEAR_END = 1950, 2030
+YEAR_START, YEAR_END = 1950, 2050
 ANN_CSV = "osservazioni_era5.csv"
 MON_CSV = "mensili_era5.csv"
 DAY_CSV = "giornalieri_era5.csv"
@@ -110,6 +110,19 @@ def build_comune(c, obs_ann, obs_mon) -> dict:
     by_year = {s["year"]: s for s in series}
     today = max(y for y in by_year if by_year[y]["source"] == "era5")
 
+    # Proiezione 2050: scenario "se il trend continua". L'incremento termico viene
+    # dal modello (warming_anomaly), mentre le notti tropicali sono proiettate dalla
+    # SENSIBILITÀ REALE del comune (quante notti in più per grado, osservate), ancorate
+    # al dato reale di oggi: così non si scende mai sotto il valore odierno.
+    d_today = round(warming_anomaly(2050) - warming_anomaly(today), 2)
+    tn_today_v = by_year[today]["tropical_nights"]
+    warm_obs = by_year[today]["t_mean_smooth"] - by_year[2011]["t_mean_smooth"]
+    tn_rate = max(0.0, (tn_today_v - by_year[2011]["tropical_nights"]) / max(0.3, warm_obs))
+    proj_2050 = {
+        "t_mean": round(by_year[today]["t_mean"] + d_today, 1),
+        "tropical_nights": min(180, int(round(tn_today_v + tn_rate * d_today))),
+        "delta_today": d_today,
+    }
     return {
         "nome": c["nome"], "slug": slugify(c["nome"]),
         "lat": c["lat"], "lon": c["lon"], "quota_m": c["quota_m"],
@@ -118,6 +131,7 @@ def build_comune(c, obs_ann, obs_mon) -> dict:
         "delta_2011_today": round(by_year[today]["t_mean_smooth"] - by_year[2011]["t_mean_smooth"], 2),
         "tn_2011": by_year[2011]["tropical_nights"],
         "tn_today": by_year[today]["tropical_nights"],
+        "proj_2050": proj_2050,
         "monthly": build_monthly(mon_c),
         "series": series,
     }
