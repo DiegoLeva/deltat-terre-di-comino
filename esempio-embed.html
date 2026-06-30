@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Esempio integrazione — Osservatorio clima</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; color: #1c2b20; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 16px; }
+    h1 { font-size: 20px; }
+    iframe { width: 100%; border: 0; display: block; }
+    .nota { font-size: 13px; color: #5e6e62; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Pagina del portale GAL (esempio)</h1>
+    <p class="nota">
+      Qui sotto è incluso l'osservatorio clima tramite iframe in modalità embed
+      (<code>?embed=1</code>). L'altezza si adatta da sola al contenuto.
+    </p>
+
+    <!-- Osservatorio clima embeddato -->
+    <iframe
+      id="clima"
+      src="https://clima-galverla.vercel.app/?embed=1"
+      title="Osservatorio clima — Terre di Comino"
+      style="min-height: 1600px;"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <script>
+    // Adatta l'altezza dell'iframe ai messaggi inviati dal sito embeddato.
+    window.addEventListener("message", function (e) {
+      var d = e.data;
+      if (d && d.type === "clima-embed-height" && typeof d.height === "number") {
+        document.getElementById("clima").style.height = (d.height + 20) + "px";
+      }
+    });
+  </script>
+</body>
+</html>

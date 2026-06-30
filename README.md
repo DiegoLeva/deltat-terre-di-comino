@@ -1,58 +1,58 @@
-# ΔT — Terre di Comino Smart Land · Climate Telemetry
+# Clima Terre di Comino — Osservatorio temperature
 
-Telemetria climatica per il distretto **Terre di Comino Smart Land** (32 comuni, prov. Frosinone).
-Calcola il riscaldamento (ΔT) vissuto da un utente dalla nascita a oggi e lo traduce in impatti quotidiani,
-ancorato agli obiettivi del PAESC locale.
+Sito web divulgativo sul riscaldamento climatico nei **32 comuni** del distretto
+**GAL Versante Laziale del PNALM** (provincia di Frosinone). Mostra, comune per comune, quanto è
+aumentata la temperatura rispetto alla normale climatica 1961–1990 e ne traduce gli effetti nella vita
+quotidiana (sonno, energia, acqua, agricoltura), con grafici, mappa, classifica, scenario 2050 e una
+card condivisibile.
+
+Sito online: **https://clima-galverla.vercel.app**
+
+## 👉 Integrazione in un altro portale
+
+Vedi **[INTEGRAZIONE.md](INTEGRAZIONE.md)** — guida passo-passo (iframe pronto + auto-resize, oppure
+hosting su proprio server). Per una prova immediata aprire **[esempio-embed.html](esempio-embed.html)**.
 
 ## Struttura
 
 ```
-PAESC-CLIMA/
-├── pipeline/                  # PARTE 1 — Data Pipeline (Python)
-│   ├── comuni.py              # 32 comuni: lat/lon + quota (m s.l.m.)
-│   ├── extract_grib.py        # ERA5 .grib -> osservazioni per comune (xarray+cfgrib)
-│   ├── build_dataset.py       # backcast 1950->2030, lapse-rate, media mobile 5y, export JSON
-│   ├── requirements.txt
-│   └── grib/                  # <-- metti qui i .grib ERA5 (t2m orario)
-│
-└── web/                       # PARTE 2 — Frontend (Next.js App Router + Tailwind)
-    ├── app/
-    │   ├── layout.tsx
-    │   ├── page.tsx
-    │   └── globals.css
-    ├── components/
-    │   ├── TimeMachine.tsx
-    │   ├── HUD.tsx
-    │   ├── ImpactCard.tsx
-    │   ├── WarmingStripes.tsx
-    │   ├── SeriesPanel.tsx
-    │   ├── PaescTelemetry.tsx
-    │   ├── ActionTracker.tsx
-    │   ├── DataTicker.tsx
-    │   ├── ClimateBriefing.tsx
-    │   └── GisMap.tsx
-    ├── lib/
-    │   ├── impacts.ts          # logiche calcolo ΔT + impatti (osservato vs stima)
-    │   ├── comuni.ts
-    │   └── paesc.ts            # baseline/target emissioni, azioni, fatti ufficiali
-    ├── public/data/climate_data.json
-    ├── package.json
-    ├── next.config.mjs
-    ├── tailwind.config.ts
-    ├── postcss.config.mjs
-    └── tsconfig.json
+web/            Il sito (Next.js 14 + Tailwind) — è la parte da integrare
+  app/          pagine e route API (/api/delta); ?embed=1 = modalità senza intestazione/footer
+  components/   componenti React (grafici, mappa Leaflet, calcolatori, card social)
+  lib/          logica e accesso ai dati
+  public/
+    brand/logo.png
+    data/climate_data.json     dataset principale (32 comuni)
+    data/daily/*.json          serie giornaliere per comune
+pipeline/       script Python che generano i dati dai file GRIB ERA5 (non serve per il sito)
+relazione/      relazione divulgativa (LaTeX)
+esempio-embed.html, INTEGRAZIONE.md
 ```
 
-## Run
+## Avvio rapido (sviluppo)
 
 ```bash
-# Pipeline
-cd pipeline
-pip install -r requirements.txt
-python build_dataset.py            # genera ../web/public/data/climate_data.json
-
-# Frontend
-cd ../web
+cd web
 npm install
-npm run dev
+npm run dev        # http://localhost:3000
+```
+
+## Build di produzione
+
+```bash
+cd web
+npm install
+npm run build
+npm run start
+```
+
+## Dati
+
+I dati climatici sono inclusi come file statici in `web/public/data/`. Non servono database né chiavi
+API. Per rigenerarli da nuovi file GRIB ERA5 (Copernicus) si usano gli script in `pipeline/`
+(Python: `extract_grib.py`, `extract_storico.py`, `build_dataset.py`); per la sola integrazione del
+sito non è necessario.
+
+Fonte dati: Copernicus Climate Change Service — ERA5 / ERA5-Land (ECMWF). Serie osservata 1961–2025,
+confronto rispetto alla normale climatica WMO 1961–1990.
 ```
