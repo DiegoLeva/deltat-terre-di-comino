@@ -20,7 +20,7 @@ function TT({ active, payload }: any) {
   return (
     <div className="card px-3 py-2 text-xs">
       <div className="font-semibold capitalize text-ink">{MESI_LONG[d.m - 1]}</div>
-      <div className="text-slate">una decina di anni fa: <b>{d.baseline}°C</b></div>
+      <div className="text-slate">clima 1961-1990: <b>{d.baseline}°C</b></div>
       <div className="text-slate">oggi: <b>{d.recent}°C</b></div>
       <div className="mt-1 font-semibold" style={{ color: scartoColor(d.scarto) }}>
         {d.scarto >= 0 ? "+" : ""}{d.scarto}°C
@@ -41,7 +41,7 @@ export default function MonthlyChart({ monthly }: { monthly: Monthly }) {
     <div className="card p-5">
       <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="font-display text-lg font-bold text-ink">Quanto fa più caldo, mese per mese</h3>
-        <p className="text-xs text-slate">gradi in più rispetto a una decina di anni fa</p>
+        <p className="text-xs text-slate">gradi in più rispetto al clima del 1961-1990</p>
       </div>
       <ResponsiveContainer width="100%" height={260}>
         <ComposedChart data={data} margin={{ top: 16, right: 10, bottom: 0, left: -8 }}>
@@ -59,8 +59,8 @@ export default function MonthlyChart({ monthly }: { monthly: Monthly }) {
         </ComposedChart>
       </ResponsiveContainer>
       <p className="mt-2 text-xs text-slate">
-        Ogni barra è un mese e mostra di quanti gradi è più caldo oggi rispetto a una decina di anni fa.
-        Sono soprattutto i mesi caldi a salire: l'estate è la stagione che cambia di più.
+        Ogni barra è un mese e mostra di quanti gradi è più caldo oggi rispetto al clima del trentennio
+        1961-1990. Sono soprattutto i mesi caldi a salire: l'estate è la stagione che cambia di più.
       </p>
     </div>
   );

@@ -66,7 +66,7 @@ export default function ClimateApp() {
                 +{m.scarto_medio.toFixed(1)}°C
               </p>
               <p className="mt-2 text-sm text-slate">
-                in media nell'anno, rispetto a una decina di anni fa
+                in media nell'anno, rispetto al clima di 60 anni fa (1961-1990)
               </p>
             </div>
             <div className="card p-6">
@@ -94,7 +94,7 @@ export default function ClimateApp() {
             <p className="text-base leading-relaxed text-ink/85">
               A <b>{c.nome}</b> ({c.quota_m} metri di altitudine) il caldo in più si sente soprattutto in{" "}
               <b className="capitalize">{meseMax}</b>, con <b>+{m.scarto_max.value.toFixed(1)}°C</b>{" "}
-              rispetto a una decina di anni fa. L'aumento è simile in tutti i paesi del distretto; quello
+              rispetto al clima del 1961-1990. L'aumento è simile in tutti i paesi del distretto; quello
               che cambia davvero da un paese all'altro è <b>quanto caldo fa in assoluto</b>, e dipende
               dall'altitudine. Le notti afose — quelle in cui non si scende sotto i 20°C e si dorme male —
               qui sono passate da <b>{c.tn_2011}</b> a <b>{c.tn_today}</b> all'anno. Come in tutta Italia,

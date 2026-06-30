@@ -32,8 +32,8 @@ def slugify(nome: str) -> str:
     s = re.sub(r"[^a-zA-Z0-9]+", "-", s).strip("-").lower()
     return s
 
-BASE_PERIOD = (2011, 2014)   # periodo di riferimento ("il passato")
-RECENT_PERIOD = (2022, 2025) # periodo recente ("oggi"), ultimi 4 anni pieni
+BASE_PERIOD = (1961, 1990)   # normale climatica WMO ("il passato")
+RECENT_PERIOD = (2011, 2025) # periodo recente ("oggi")
 
 
 def warming_anomaly(year: int) -> float:
@@ -76,10 +76,18 @@ def build_series(c, obs_c) -> list:
     return df.to_dict(orient="records")
 
 
-def build_monthly(mon_c: pd.DataFrame) -> dict:
+def build_monthly(day_c: pd.DataFrame) -> dict:
+    """Confronto mensile baseline (1961-1990) vs recente, calcolato in modo COERENTE:
+    media giornaliera = (tmin+tmax)/2 per ENTRAMBI i periodi (così non c'è discontinuità
+    di metodo fra storico e recente)."""
+    d = day_c.copy()
+    d["year"] = d["date"].str[:4].astype(int)
+    d["month"] = d["date"].str[5:7].astype(int)
+    d["tmean"] = (d["tmin"] + d["tmax"]) / 2
+
     def period_mean(lo, hi):
-        sub = mon_c[(mon_c["year"] >= lo) & (mon_c["year"] <= hi)]
-        return sub.groupby("month")["t_mean"].mean()
+        sub = d[(d["year"] >= lo) & (d["year"] <= hi)]
+        return sub.groupby("month")["tmean"].mean()
 
     base = period_mean(*BASE_PERIOD)
     rec = period_mean(*RECENT_PERIOD)
@@ -103,9 +111,9 @@ def build_monthly(mon_c: pd.DataFrame) -> dict:
     }
 
 
-def build_comune(c, obs_ann, obs_mon) -> dict:
+def build_comune(c, obs_ann, obs_day) -> dict:
     obs_c = obs_ann[obs_ann["comune"] == c["nome"]].set_index("year")
-    mon_c = obs_mon[obs_mon["comune"] == c["nome"]]
+    day_c = obs_day[obs_day["comune"] == c["nome"]]
     series = build_series(c, obs_c)
     by_year = {s["year"]: s for s in series}
     today = max(y for y in by_year if by_year[y]["source"] == "era5")
@@ -132,7 +140,7 @@ def build_comune(c, obs_ann, obs_mon) -> dict:
         "tn_2011": by_year[2011]["tropical_nights"],
         "tn_today": by_year[today]["tropical_nights"],
         "proj_2050": proj_2050,
-        "monthly": build_monthly(mon_c),
+        "monthly": build_monthly(day_c),
         "series": series,
     }
 
@@ -185,7 +193,7 @@ def main():
             "province": "Frosinone",
             "n_comuni": len(COMUNI),
             "year_start": YEAR_START, "year_end": YEAR_END,
-            "obs_start": 2011, "obs_end": 2025,
+            "obs_start": 1961, "obs_end": 2025,
             "source_dataset": "Copernicus Climate Change Service — ERA5 (ECMWF)",
             "lapse_rate_c_per_km": 6.5,
             "base_period": f"{BASE_PERIOD[0]}-{BASE_PERIOD[1]}",
@@ -194,7 +202,7 @@ def main():
             "paesc": {"baseline_year": 2011, "baseline_tco2": 512395,
                       "target_year": 2030, "target_tco2": 295555, "target_reduction_pct": 42.32},
         },
-        "comuni": [build_comune(c, obs_ann, obs_mon) for c in COMUNI],
+        "comuni": [build_comune(c, obs_ann, obs_day) for c in COMUNI],
     }
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
     with open(OUT_JSON, "w", encoding="utf-8") as f:
