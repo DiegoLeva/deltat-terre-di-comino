@@ -185,6 +185,11 @@ def main():
         obs_day = pd.concat([obs_day[["comune", "date", "tmin", "tmax"]], st_day], ignore_index=True)
         print(f"[storico] +{len(st_day)} righe giornaliere storiche")
 
+    # negli anni di sovrapposizione (es. 2011-2012) tengo il dato RECENTE (da t2m),
+    # che viene prima nel concat -> keep='first'
+    obs_ann = obs_ann.drop_duplicates(subset=["comune", "year"], keep="first").reset_index(drop=True)
+    obs_day = obs_day.drop_duplicates(subset=["comune", "date"], keep="first").reset_index(drop=True)
+
     print(f"[era5] {len(obs_ann)} righe annuali, {len(obs_mon)} mensili, {len(obs_day)} giornaliere")
 
     out = {
