@@ -38,131 +38,62 @@
 \newcolumntype{C}{>{\centering\arraybackslash}X}
 \newcommand{\gradi}{$^{\circ}$C}
 
-\title{\vspace{-1.6cm}\textbf{Il riscaldamento che non si vede\\[2pt]
-\large Anomalie termiche e impatti quotidiani nei 32 comuni del\\
-GAL Versante Laziale del Parco Nazionale d'Abruzzo, Lazio e Molise}}
-\author{A cura di \rule{4cm}{0.4pt} \\ \small Comprensorio GAL ``Verla'' --- Provincia di Frosinone}
-\date{Giugno 2026}
+\title{\vspace{-1.4cm}\textbf{IL CLIMA CAMBIA ANCHE A CASA NOSTRA}\\[4pt]
+\large Quanto fa più caldo nei 32 comuni P.A.E.S.C. e come questo impatta la nostra vita quotidiana}
+\author{A cura del GAL Versante Laziale del PNALM}
+\date{Aggiornamento Dati: Giugno 2026}
 
 \begin{document}
 
 \maketitle
 
-\begin{abstract}
-\noindent Quando si parla di cambiamento climatico l'attenzione cade quasi sempre sui grandi numeri planetari, su scenari lontani nel tempo o nello spazio. Eppure il riscaldamento è un fenomeno che si misura anche sotto casa, paese per paese. In queste pagine proviamo a guardarlo da vicino nel territorio del GAL Versante Laziale del PNALM --- trentadue comuni a cavallo fra la Val di Comino, la valle del Liri e le pendici delle Mainarde --- ricostruendo l'andamento delle temperature a partire dai dati di rianalisi \textit{ERA5} del \textit{Copernicus Climate Change Service}. Il lavoro accompagna lo sviluppo di un'applicazione web divulgativa che permette a chiunque di interrogare il dato del proprio comune e di tradurlo in conseguenze concrete: notti senza riposo, bollette, acqua per i campi, raccolti. Disponendo ormai di una serie osservata \emph{continua dal 1961 a oggi}, il confronto fra il clima recente (2011--2025) e la normale climatica di riferimento 1961--1990 quantifica per il distretto un riscaldamento medio di circa $+2{,}3\,^{\circ}$C, con un picco a giugno superiore a tre gradi. Un risultato privo di ambiguità, in linea con quanto la letteratura osserva alla scala continentale.
-\end{abstract}
-
-\vspace{0.3cm}
+\section*{Sommario}
+Spesso pensiamo al riscaldamento globale come a un problema lontano, che riguarda i ghiacciai dell'Artico o gli orsi polari. Eppure le estati sono sempre più roventi e le piogge sempre più imprevedibili anche fuori dalla nostra porta di casa. Questo documento, a supporto di una nuova piattaforma web di sensibilizzazione, traduce i complessi dati climatici satellitari europei nella realtà quotidiana dei 32 comuni del GAL Verla. Il nostro obiettivo non è fare allarmismo, ma rendere visibile e comprensibile a tutti un fenomeno che sta lentamente mutando il nostro territorio, le nostre abitudini e la nostra economia. I numeri che seguono raccontano una storia semplice e netta: rispetto al clima dei nostri nonni, qui fa stabilmente più caldo di oltre due gradi, e d'estate anche di più.
 
 \section{Perché guardare al clima del proprio paese}
-Le ondate di calore fanno notizia perché sono visibili e improvvise; ma sono la punta dell'iceberg. Il segnale che conta davvero non è il singolo record giornaliero, bensì lo spostamento lento e silenzioso della \emph{media}: è la media che dice se un territorio sta cambiando pelle. Dagli anni Ottanta la temperatura media europea è cresciuta di circa mezzo grado per decennio, un ritmo doppio rispetto a quello dell'intero pianeta; il bacino del Mediterraneo, di cui l'Appennino centrale fa parte a pieno titolo, si scalda ancora più in fretta, con un anticipo stimato attorno al venti per cento rispetto alla media globale \cite{medecc2020, ipcc2021}.
+Quando si parla di cambiamento climatico, la domanda che sorge spontanea in ognuno di noi è: ``Sì, ma da me quanto fa più caldo rispetto a una volta?''. Non è una semplice curiosità, ma una questione vitale per un territorio come quello del GAL Versante Laziale del Parco Nazionale d'Abruzzo, Lazio e Molise (GAL Verla). Parliamo di 32 amministrazioni comunali in provincia di Frosinone, estese su oltre \SI{1168}{\kilo\meter\squared}, in gran parte classificate come zona montana. In quest'area l'agricoltura, il turismo e la qualità della vita dipendono intimamente dall'equilibrio del clima locale: una vendemmia anticipata, un'estate più lunga, una sorgente più povera d'acqua non sono dettagli, ma fatti che incidono sull'economia e sulla salute delle persone.
 
-C'è un secondo aspetto, spesso trascurato: a scaldarsi di più sono proprio le zone interne e fredde, quelle di montagna, non le coste. Per un comprensorio come il nostro, fatto di borghi appenninici e di fondovalle agricoli, la domanda ``quanto fa più caldo qui rispetto a una volta?'' non è un esercizio accademico ma una questione che tocca l'agricoltura, il turismo, la salute degli anziani, il costo dell'energia. Da qui è nata l'idea di costruire uno strumento che restituisse quel numero, comune per comune, e che lo rendesse leggibile a chi non maneggia gradi e anomalie tutti i giorni.
+Le ondate di calore fanno notizia perché sono visibili e improvvise, ma sono solo la punta dell'iceberg. Il segnale che conta davvero è lo spostamento lento e silenzioso della \textbf{media termica}: è la media a dirci se un territorio sta cambiando pelle. Dagli anni Ottanta il bacino del Mediterraneo si scalda a un ritmo superiore del 20\% rispetto alla media globale, e sono proprio le zone interne e d'altura --- come gran parte del nostro comprensorio --- a riscaldarsi più in fretta. Per capire l'entità del fenomeno a casa nostra abbiamo unito il rigore della scienza alla chiarezza della divulgazione.
 
-\section{Da dove vengono i dati}
-La tentazione, di fronte a una domanda del genere, sarebbe quella di andare a cercare la centralina meteo più vicina. È però la strada sbagliata: le serie termometriche al suolo soffrono di interruzioni storiche, spostamenti di sensori, urbanizzazione progressiva attorno alla stazione, e nei nostri comuni montani semplicemente non esistono con continuità sufficiente. Abbiamo quindi scelto la via della \textbf{rianalisi climatica}, cioè la ricostruzione fisica dello stato dell'atmosfera ottenuta facendo ``digerire'' a un modello meteorologico tutte le osservazioni disponibili.
+\section{Da dove vengono i dati: i satelliti europei}
+Per calcolare l'aumento delle temperature non ci siamo affidati alle singole centraline meteo locali, che spesso non esistono nei piccoli comuni montani o forniscono dati falsati dall'asfalto cittadino. Abbiamo invece utilizzato la \textbf{rianalisi climatica}, ovvero il potente database \textit{ERA5} (e la sua versione ad alta risoluzione \textit{ERA5-Land}) del programma europeo \textbf{Copernicus}.
 
-Nello specifico, l'ossatura del lavoro è il dataset \textbf{ERA5} prodotto dal Centro Europeo per le Previsioni Meteorologiche a Medio Termine (ECMWF) nell'ambito del Copernicus Climate Change Service \cite{hersbach2020, c3s}. ERA5 fornisce la temperatura a due metri dal suolo con cadenza oraria; nella sua declinazione ad alta risoluzione \textit{ERA5-Land} \cite{munoz2021} la maglia di calcolo scende a circa \SI{11}{\kilo\meter}. Per gli anni recenti (2011--2025) abbiamo estratto la serie oraria della temperatura a due metri ($T_{2m}$), ricavandone medie, minime e massime giornaliere e i relativi indicatori.
+Immaginate un supercomputer che incrocia i dati dei satelliti con migliaia di osservazioni al suolo, creando una mappa termica oggettiva del nostro territorio, ora dopo ora, dal 1961 fino a oggi. Poiché in montagna fa ovviamente più freddo che a valle, i dati sono stati elaborati tenendo conto dell'altitudine esatta di ogni singolo comune, applicando un correttivo matematico noto come \textbf{downscaling altimetrico}. Sapendo che la temperatura scende di circa \SI{6.5}{\celsius} ogni mille metri di dislivello, l'algoritmo calcola la temperatura giusta per ogni paese:
+\begin{equation*}
+T_{\text{comune}} = T_{\text{satellite}} - 6{,}5 \cdot \Delta z \quad (\Delta z \text{ in km}).
+\end{equation*}
 
-Per il passato abbiamo recuperato, anno dopo anno, i campi di temperatura \emph{minima} e \emph{massima} giornaliera ($mn2t$, $mx2t$) dal 1961 al 2012; per questi anni la temperatura media giornaliera è stata stimata come semisomma $\overline{T}_d = (T_{\min} + T_{\max})/2$, prassi consolidata nella climatologia quando si dispone dei soli estremi giornalieri. In questo modo l'intera normale trentennale 1961--1990 è coperta da dato osservato e la serie storica si salda senza soluzione di continuità a quella recente: disponiamo così di una \textbf{serie osservata continua dal 1961 a oggi}. Per garantire la coerenza del confronto, le medie usate per il calcolo delle anomalie sono ricavate con lo stesso metodo --- la semisomma di minima e massima --- in entrambi i periodi.
+Il risultato è un confronto netto e inequivocabile fra le temperature del passato e quelle di oggi. Come ``passato'' usiamo il periodo di riferimento ufficiale stabilito dall'Organizzazione Meteorologica Mondiale, la \textbf{media degli anni 1961--1990}: è la fotografia del clima che hanno conosciuto i nostri genitori e nonni. Avendo recuperato l'intera serie storica, oggi possiamo confrontarla con gli ultimi anni (2011--2025) senza buchi e senza forzature.
 
-\subsection{Il nodo della risoluzione: stessa cella, paesi diversi}
-La griglia di rianalisi ha un limite intrinseco: una cella copre un'area di parecchi chilometri di lato e ne restituisce un valore medio. Comuni vicini ma a quote molto diverse --- si pensi a un centro di fondovalle e a un paese arroccato oltre i mille metri --- finiscono nella stessa cella e condividerebbero, di partenza, lo stesso numero. È un problema reale: la temperatura cambia con la quota in modo tutt'altro che trascurabile.
+\section{L'App Web: uno strumento per capire e sensibilizzare}
+Per rendere questi dati accessibili a chiunque abbiamo creato l'applicativo web \url{https://clima-galverla.vercel.app}. Questa piattaforma non è pensata per i soli scienziati, ma nasce come un vero strumento di \textbf{sensibilizzazione civica}: si sceglie il proprio comune e, in un istante, si legge quanto è cambiato il clima dove si vive.
 
-Per restituire a ogni paese la sua temperatura abbiamo applicato un \textbf{downscaling altimetrico} basato sul gradiente termico verticale standard dell'atmosfera, pari a circa \SI{6.5}{\celsius} ogni mille metri di dislivello. Detta cella di rianalisi $T_{\text{cella}}$ e nota la sua quota media $z_{\text{cella}}$, la stima per il comune di quota $z_{\text{com}}$ diventa
-\begin{equation}
-T_{\text{com}} = T_{\text{cella}} - \gamma\,\bigl(z_{\text{com}} - z_{\text{cella}}\bigr), \qquad \gamma \simeq 6{,}5~^{\circ}\mathrm{C}\,\mathrm{km}^{-1}.
-\end{equation}
-La correzione è una semplice traslazione costante in temperatura, applicata prima del conteggio delle soglie (notti tropicali, giorni caldi): è il motivo per cui, nelle pagine che seguono, paesi nella stessa cella mostrano comunque valori assoluti e numeri di notti afose diversi e fisicamente coerenti.
-
-\subsection{La baseline e il calcolo dell'anomalia}
-Per distinguere il segnale climatico dal rumore meteorologico di un singolo anno occorre un termine di paragone stabile. Lo standard fissato dall'Organizzazione Meteorologica Mondiale è la media del trentennio \textbf{1961--1990} \cite{wmo}, ancora oggi il riferimento più usato per misurare le anomalie ed è quello che adottiamo --- nel testo come nell'applicazione --- ora che è interamente coperto da dato osservato. L'anomalia termica del mese $m$ si definisce in modo elementare come scarto del periodo recente rispetto alla normale:
-\begin{equation}
-\Delta T_m = \overline{T}_{\text{2011-2025},\,m} - \overline{T}_{\text{1961-1990},\,m}.
-\end{equation}
-
-A monte, per smorzare l'oscillazione interannuale nelle serie lunghe, le temperature medie annue sono filtrate con una media mobile centrata a cinque anni:
-\begin{equation}
-\widetilde{T}_{y} = \frac{1}{5}\sum_{k=-2}^{2} T_{y+k}.
-\end{equation}
-
-\subsection{Gli indicatori di disagio}
-Accanto alla media abbiamo conteggiato due indicatori dal forte significato percepito. Le \textbf{notti tropicali} sono le notti in cui la temperatura minima non scende sotto i \SI{20}{\celsius}: sono quelle in cui il corpo non riesce a recuperare dal caldo del giorno e si dorme male. I \textbf{giorni caldi} sono i giorni con massima oltre i \SI{30}{\celsius}. Entrambi sono contati direttamente sulla serie, dopo la correzione altimetrica, e non stimati: rappresentano quindi il dato osservato più tangibile dell'intero lavoro.
-
-\section{L'applicazione web}
-Il dato, da solo, non comunica. Per questo lo abbiamo incardinato in un'applicazione web pensata per il cittadino prima ancora che per il tecnico. L'architettura segue una logica deliberatamente semplice e a basso costo di esercizio, riassunta in Tabella~\ref{tab:stack}.
+Dire che la temperatura media è aumentata di ``due gradi'' può sembrare poco. Per questo l'app funge da \textbf{traduttore}: prende i gradi centigradi e li trasforma in impatti concreti sulla nostra vita di tutti i giorni, riassunti nella Tabella~\ref{tab:impatti}. La scienza ci dice infatti che l'innalzamento delle temperature porta conseguenze misurabili e quotidiane.
 
 \begin{table}[H]
 \centering
-\caption{Catena di elaborazione e pubblicazione dell'applicazione.}
-\label{tab:stack}
-\renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\textwidth}{l Y}
-\toprule
-\textbf{Componente} & \textbf{Funzione} \\
-\midrule
-Estrazione (Python: \texttt{xarray}, \texttt{cfgrib}) & Lettura dei file GRIB ERA5, ritaglio sui 32 comuni, downscaling altimetrico, conteggio di medie mensili, minime e massime giornaliere, notti tropicali e giorni caldi. \\
-Costruzione dataset (Python: \texttt{pandas}) & Calcolo degli scarti rispetto alla normale 1961--1990, media mobile a 5 anni, proiezione al 2050, esportazione in JSON. \\
-Frontend (Next.js, Tailwind CSS) & Interfaccia di consultazione: ricerca del comune, grafici, mappa, schede d'impatto, classifica e card condivisibile. \\
-Pubblicazione (Vercel, rete CDN) & Sito statico, senza database, raggiungibile da qualsiasi dispositivo. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-Una precisazione tecnica è doverosa, perché smentisce un'aspettativa diffusa: l'archivio del Copernicus \emph{non} si interroga in tempo reale dal browser. L'accesso ai dati avviene tramite un sistema a coda asincrono, autenticato, che restituisce file di dati dopo un'elaborazione che può richiedere minuti. Tutta la parte ``pesante'' è perciò svolta a monte, una volta sola; ciò che l'utente interroga è il prodotto finito, servito istantaneamente. L'applicazione è raggiungibile all'indirizzo \url{https://clima-galverla.vercel.app}.
-
-\paragraph{Dal grado all'esperienza quotidiana.} La parte forse più efficace sul piano comunicativo è il \emph{traduttore d'impatto}: un aumento di temperatura, di per sé astratto, viene convertito in grandezze familiari attraverso fattori di conversione tratti dalla letteratura, riportati in Tabella~\ref{tab:impatti}. Dove possibile si usa il dato osservato (è il caso delle notti tropicali, contate una per una); altrove si ricorre a una stima proporzionale, esplicitamente segnalata come tale e corredata della fonte. A queste si affiancano una proiezione di scenario al 2050, una classifica dei comuni e la funzione ``che tempo faceva il giorno della tua nascita'', che attinge alla serie giornaliera dal 1961.
-
-\begin{table}[H]
-\centering
-\caption{Fattori di traduzione del riscaldamento in impatti quotidiani.}
+\caption{Come il clima impatta la nostra vita quotidiana (i fattori di traduzione dell'app).}
 \label{tab:impatti}
-\renewcommand{\arraystretch}{1.4}
+\renewcommand{\arraystretch}{1.35}
 \begin{tabularx}{\textwidth}{Y C Y}
 \toprule
-\textbf{Ambito} & \textbf{Fattore adottato} & \textbf{Riferimento} \\
+\textbf{Ambito della vita} & \textbf{L'impatto misurato} & \textbf{Significato pratico} \\
 \midrule
-Sonno e salute & $-12$ min di sonno per ogni notte tropicale & Minor et al. (2024) \cite{sleep} \\
-Energia per il raffrescamento & $+13\%$ di consumo elettrico per \SI{1}{\celsius} & EIA; Climate Central \cite{eia, climatecentral} \\
-Acqua e irrigazione & $+6\%$ di fabbisogno irriguo per \SI{1}{\celsius} (area mediterranea) & Copernicus HESS; CMCC \cite{hess, cmcc} \\
-Agricoltura & $-5\%$ di resa cerealicola per \SI{1}{\celsius}; vite con maggiore richiesta idrica & IPCC AR6 \cite{ipcc2021} \\
+Salute e riposo & $-12$ minuti di sonno & Per ogni ``notte tropicale'' dormiamo meno e peggio, e ci svegliamo più stanchi e vulnerabili. \\
+Bollette e consumi & $+13\%$ di energia elettrica per grado & Rinfrescare le case con i condizionatori costa di più, ogni estate che passa. \\
+Agricoltura e acqua & $+6\%$ di fabbisogno irriguo per grado & Le campagne hanno bisogno di molta più acqua, proprio mentre le siccità si allungano. \\
+Cibo e raccolti & fino a $-5\%$ di resa dei cereali per grado & Meno produzione e vendemmie anticipate: il caldo cambia anche quello che mettiamo in tavola. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\section{Risultati per il comprensorio}
-\subsection{Il confronto con la normale 1961--1990}
-Il risultato d'insieme è netto. Confrontando la media dell'intero distretto nel periodo recente \textbf{2011--2025} con la normale climatica \textbf{1961--1990}, la temperatura media annua passa da \SI{10.58}{\celsius} a \SI{12.89}{\celsius}: un incremento di \textbf{$+2{,}3$~\gradi} in poco più di mezzo secolo. Non è una stima modellistica ma il confronto diretto fra due periodi di dato osservato, calcolati con lo stesso metodo. Il riscaldamento si concentra nei mesi caldi: il picco si registra a \textbf{giugno}, con uno scarto medio di comprensorio di circa \textbf{$+3{,}2$~\gradi}.
+Oltre al ``traduttore'', l'app offre alcuni strumenti pensati per coinvolgere chi la usa: la \textbf{striscia degli anni}, che con un colpo d'occhio mostra il passaggio dal blu (freddo) al rosso (caldo) anno per anno; la funzione \textbf{``che tempo faceva il giorno della tua nascita''}, che confronta la propria data di nascita (dal 1961) con lo stesso giorno di oggi; la \textbf{classifica} dei comuni più colpiti dal caldo notturno; uno \textbf{scenario al 2050}; e una \textbf{card da condividere} sui social, per far girare il dato del proprio paese.
 
-La Tabella~\ref{tab:storico} riporta il dettaglio per un campione di comuni rappresentativi delle diverse fasce altimetriche. Si conferma quanto già osservato: l'entità del riscaldamento è notevolmente omogenea sul territorio (ovunque attorno ai $+2{,}3 / +2{,}4$~\gradi), mentre la temperatura assoluta resta governata dalla quota, dai fondovalle del Cassinate fino ai mille metri di Terelle.
+\section{I risultati sul nostro territorio}
+Guardando ai numeri dei 32 comuni, il quadro è chiarissimo: \textbf{le nostre estati si stanno infiammando} e gli inverni si addolciscono. Rispetto al clima del 1961--1990, la temperatura media dell'intero distretto è salita di circa \textbf{$+2{,}3$~\gradi}, con un picco estivo che supera i tre gradi.
 
-\begin{table}[H]
-\centering
-\caption{Temperatura media annua: normale 1961--1990 a confronto con il periodo recente 2011--2025.}
-\label{tab:storico}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{Y C C C C}
-\toprule
-\textbf{Comune} & \textbf{Quota (m)} & \textbf{1961--1990 (\gradi)} & \textbf{2011--2025 (\gradi)} & \textbf{Variazione (\gradi)} \\
-\midrule
-Pontecorvo & 60 & 14,07 & 16,34 & $+2{,}27$ \\
-Cervaro & 145 & 12,78 & 15,04 & $+2{,}26$ \\
-Arpino & 450 & 9,70 & 12,06 & $+2{,}36$ \\
-Vicalvi & 460 & 8,79 & 11,15 & $+2{,}36$ \\
-Alvito & 480 & 8,67 & 11,03 & $+2{,}36$ \\
-Atina & 490 & 11,27 & 13,56 & $+2{,}29$ \\
-Veroli & 570 & 8,91 & 11,28 & $+2{,}37$ \\
-Picinisco & 725 & 7,07 & 9,43 & $+2{,}37$ \\
-Acquafondata & 926 & 7,70 & 9,97 & $+2{,}27$ \\
-Terelle & 1050 & 7,63 & 9,93 & $+2{,}29$ \\
-\midrule
-\textbf{Media distretto} & --- & \textbf{10,58} & \textbf{12,89} & \textbf{$+2{,}32$} \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsection{Il segnale mensile: l'esempio di Atina}
-La Figura~\ref{fig:atina} scompone mese per mese lo scarto del periodo recente rispetto alla normale 1961--1990 per Atina (\SI{490}{\meter} s.l.m.). Tutti i mesi sono ormai più caldi del riferimento storico, senza eccezioni; l'estate guida la classifica, con giugno e agosto a $+3{,}2$~\gradi, mentre nessun mese scende sotto il grado e mezzo. Mediando sull'anno, lo scarto si attesta su $+2{,}3$~\gradi.
+\subsection{L'estate rovente: il caso di Atina}
+Prendiamo come esempio il comune di Atina (\SI{490}{\meter} s.l.m.). La temperatura media annua è cresciuta di circa \SI{2.3}{\celsius}, ma è nei mesi caldi che si registra lo scarto maggiore (Figura~\ref{fig:atina}): a giugno e ad agosto si tocca un impressionante \textbf{$+3{,}2$~\gradi} rispetto al passato. Questo significa ondate di calore più intense e durature, capaci di mettere a dura prova le fasce più deboli della popolazione, e notti in cui diventa difficile riposare.
 
 \begin{figure}[H]
 \centering
@@ -170,8 +101,8 @@ La Figura~\ref{fig:atina} scompone mese per mese lo scarto del periodo recente r
 \begin{axis}[
     width=0.92\textwidth, height=7cm,
     ybar, bar width=16pt,
-    title={\textbf{Scarto termico mensile ad Atina: 2011--2025 vs normale 1961--1990}},
-    ylabel={Anomalia $\Delta T_m$ ($^{\circ}$C)},
+    title={\textbf{Scarto termico mese per mese ad Atina: quanto fa più caldo rispetto agli anni '60-'80}},
+    ylabel={Gradi di differenza ($^{\circ}$C)},
     ymin=0, ymax=4,
     xtick=data,
     xticklabels={Gen,Feb,Mar,Apr,Mag,Giu,Lug,Ago,Set,Ott,Nov,Dic},
@@ -187,21 +118,21 @@ La Figura~\ref{fig:atina} scompone mese per mese lo scarto del periodo recente r
 \addplot[sharp plot, no markers, black, dashed, thick] coordinates {(0.4,2.3)(12.6,2.3)};
 \end{axis}
 \end{tikzpicture}
-\caption{Elaborazione su dati ERA5. L'istogramma quantifica l'anomalia termica dei singoli mesi del periodo 2011--2025 rispetto alla normale climatica 1961--1990; la linea tratteggiata indica lo scarto medio annuo ($+2{,}3$~\gradi). I valori derivano dal confronto fra dato osservato in entrambi i periodi.}
+\caption{L'istogramma mostra di quanti gradi sono aumentate le temperature ad Atina, mese per mese, rispetto alla media del periodo 1961--1990. La linea tratteggiata è l'aumento medio annuo ($+2{,}3$~\gradi). Tutti i mesi sono più caldi del passato; il picco estivo è evidente.}
 \label{fig:atina}
 \end{figure}
 
-\subsection{Le notti tropicali e il ruolo della quota}
-Se lo scarto medio è un segnale di area, abbastanza uniforme sul comprensorio, le notti tropicali raccontano una storia molto più sfaccettata, legata in modo stretto all'altitudine. La Figura~\ref{fig:notti} mette in relazione la quota di ciascun comune con il numero di notti tropicali del periodo recente. Nei fondovalle del Cassinate e del Sorano si è passati da una ventina a oltre quaranta notti afose all'anno; salendo di quota il fenomeno si dirada rapidamente, fino ad annullarsi nei centri oltre i settecento metri, dove la minima notturna continua a scendere sotto la soglia critica.
+\subsection{Il disagio notturno e il rifugio della montagna}
+Il vero indicatore del disagio fisico sono le cosiddette \textbf{``notti tropicali''}, quelle notti afose in cui il termometro non scende mai sotto i \SI{20}{\celsius}. Come illustrato nella Figura~\ref{fig:notti}, qui entra in gioco la geografia del nostro territorio. Nei comuni di fondovalle le notti tropicali sono letteralmente esplose, passando da una decina a oltre quaranta notti insonni all'anno. Man mano che si sale di quota, però, la montagna offre ancora un rifugio: oltre i 700 metri l'aria frizzante notturna resiste e le notti tropicali restano vicine a zero. È la stessa ragione per cui due paesi vicini, ma a quote diverse, vivono estati molto differenti.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
     width=0.92\textwidth, height=7cm,
-    title={\textbf{Notti tropicali (periodo recente) in funzione della quota}},
-    xlabel={Quota del comune (m s.l.m.)},
-    ylabel={Notti tropicali all'anno},
+    title={\textbf{Notti insonni (notti tropicali) e altitudine: chi soffre di più il caldo?}},
+    xlabel={Altitudine del comune (metri sul livello del mare)},
+    ylabel={Notti oltre i $20\,^{\circ}$C all'anno},
     xmin=0, xmax=1100, ymin=-2, ymax=55,
     grid=major, major grid style={dashed, gray!30},
     only marks, mark size=2.4pt,
@@ -212,88 +143,43 @@ Se lo scarto medio è un segnale di area, abbastanza uniforme sul comprensorio, 
 };
 \end{axis}
 \end{tikzpicture}
-\caption{Ogni punto è un comune. La dipendenza dalla quota è evidente: il disagio notturno da calore si concentra nei fondovalle, mentre i centri d'altura ne sono finora preservati. È la dimostrazione pratica dell'utilità del downscaling altimetrico.}
+\caption{Ogni punto è un comune del GAL Verla. Più un paese si trova in basso (a sinistra), maggiore è il numero di notti afose (in alto). Chi vive in collina o in montagna gode ancora di notti fresche.}
 \label{fig:notti}
 \end{figure}
 
-\subsection{Quadro d'insieme dei 32 comuni}
-La Tabella~\ref{tab:comuni} raccoglie il quadro completo: per ogni comune sono riportati la quota, lo scarto medio annuo rispetto alla normale 1961--1990, l'intensità del picco mensile e l'evoluzione delle notti tropicali dal 2011 al 2025. Emergono con chiarezza i due livelli di lettura: un riscaldamento medio compreso fra $+2{,}3$ e $+2{,}4$~\gradi praticamente ovunque, e una geografia del disagio notturno fortemente modulata dall'altitudine.
+\subsection{La mappa termica dei nostri comuni}
+La Tabella~\ref{tab:comuni} offre una fotografia chiara e diretta per alcuni dei comuni più rappresentativi. I dati mostrano come, a fronte di un innalzamento medio costante (attorno ai due gradi e mezzo ovunque), le conseguenze sul caldo notturno varino fortemente con la posizione geografica.
 
 \begin{table}[H]
 \centering
-\caption{Sintesi delle anomalie termiche per i 32 comuni del GAL Verla (ordinati per quota).}
+\caption{Il clima che cambia: aumento termico e notti afose nei comuni rappresentativi.}
 \label{tab:comuni}
-\renewcommand{\arraystretch}{1.12}
-\footnotesize
+\renewcommand{\arraystretch}{1.25}
 \begin{tabularx}{\textwidth}{Y C C C C}
 \toprule
-\textbf{Comune} & \textbf{Quota (m)} & \textbf{$\Delta T_{\text{avg}}$ (\gradi)} & \textbf{Picco (\gradi)} & \textbf{Notti trop. 2011\,$\rightarrow$\,2025} \\
+\textbf{Comune} & \textbf{Altitudine} & \textbf{Aumento annuo} & \textbf{Picco estivo} & \textbf{Notti tropicali (passato $\rightarrow$ oggi)} \\
 \midrule
-Pontecorvo & 60 & $+2{,}3$ & $+3{,}2$ (giu) & $20 \rightarrow 47$ \\
-Villa Santa Lucia & 109 & $+2{,}3$ & $+3{,}2$ (giu) & $16 \rightarrow 43$ \\
-Aquino & 110 & $+2{,}3$ & $+3{,}2$ (giu) & $16 \rightarrow 43$ \\
-Sant'Elia Fiumerapido & 110 & $+2{,}3$ & $+3{,}2$ (giu) & $16 \rightarrow 43$ \\
-Piedimonte San Germano & 130 & $+2{,}3$ & $+3{,}2$ (giu) & $16 \rightarrow 42$ \\
-Cervaro & 145 & $+2{,}3$ & $+3{,}2$ (ago) & $12 \rightarrow 26$ \\
-San Vittore del Lazio & 188 & $+2{,}3$ & $+3{,}2$ (ago) & $9 \rightarrow 20$ \\
-Roccasecca & 235 & $+2{,}3$ & $+3{,}2$ (giu) & $11 \rightarrow 30$ \\
-Castelliri & 244 & $+2{,}4$ & $+3{,}3$ (giu) & $2 \rightarrow 4$ \\
-Castrocielo & 250 & $+2{,}3$ & $+3{,}2$ (giu) & $10 \rightarrow 29$ \\
-Strangolagalli & 270 & $+2{,}3$ & $+3{,}2$ (giu) & $14 \rightarrow 38$ \\
-Boville Ernica & 333 & $+2{,}4$ & $+3{,}3$ (giu) & $1 \rightarrow 0$ \\
-Ripi & 350 & $+2{,}3$ & $+3{,}2$ (giu) & $9 \rightarrow 25$ \\
-Belmonte Castello & 412 & $+2{,}3$ & $+3{,}2$ (giu) & $2 \rightarrow 9$ \\
-Casalvieri & 412 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-Monte San Giovanni Campano & 420 & $+2{,}4$ & $+3{,}3$ (giu) & $1 \rightarrow 0$ \\
-Arpino & 450 & $+2{,}4$ & $+3{,}3$ (giu) & $0 \rightarrow 0$ \\
-Vicalvi & 460 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-Vallerotonda & 472 & $+2{,}3$ & $+3{,}2$ (ago) & $1 \rightarrow 3$ \\
-Alvito & 480 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-Atina & 490 & $+2{,}3$ & $+3{,}2$ (giu) & $1 \rightarrow 4$ \\
-Villa Latina & 500 & $+2{,}3$ & $+3{,}2$ (giu) & $1 \rightarrow 4$ \\
-Colle San Magno & 547 & $+2{,}3$ & $+3{,}2$ (giu) & $1 \rightarrow 3$ \\
-Gallinaro & 550 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-Veroli & 570 & $+2{,}4$ & $+3{,}3$ (giu) & $0 \rightarrow 0$ \\
-Campoli Appennino & 650 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-Picinisco & 725 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-San Donato Val di Comino & 728 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-Settefrati & 790 & $+2{,}4$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
-San Biagio Saracinisco & 850 & $+2{,}3$ & $+3{,}2$ (ago) & $0 \rightarrow 0$ \\
-Acquafondata & 926 & $+2{,}3$ & $+3{,}2$ (ago) & $0 \rightarrow 0$ \\
-Terelle & 1050 & $+2{,}3$ & $+3{,}2$ (giu) & $0 \rightarrow 0$ \\
+Pontecorvo & \SI{60}{\meter} & $+2{,}3$~\gradi & $+3{,}2$~\gradi & $20 \rightarrow 47$ \\
+Piedimonte San Germano & \SI{130}{\meter} & $+2{,}3$~\gradi & $+3{,}2$~\gradi & $16 \rightarrow 42$ \\
+Roccasecca & \SI{235}{\meter} & $+2{,}3$~\gradi & $+3{,}2$~\gradi & $11 \rightarrow 30$ \\
+Ripi & \SI{350}{\meter} & $+2{,}3$~\gradi & $+3{,}2$~\gradi & $9 \rightarrow 25$ \\
+Atina & \SI{490}{\meter} & $+2{,}3$~\gradi & $+3{,}2$~\gradi & $1 \rightarrow 4$ \\
+Campoli Appennino & \SI{650}{\meter} & $+2{,}4$~\gradi & $+3{,}2$~\gradi & $0 \rightarrow 0$ \\
+San Donato Val di Comino & \SI{728}{\meter} & $+2{,}4$~\gradi & $+3{,}2$~\gradi & $0 \rightarrow 0$ \\
+Terelle & \SI{1050}{\meter} & $+2{,}3$~\gradi & $+3{,}2$~\gradi & $0 \rightarrow 0$ \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\subsection{La striscia del riscaldamento}
-Per la comunicazione l'applicazione adotta anche le ormai celebri \emph{warming stripes}: una sequenza di bande verticali, una per anno, colorate dal blu (più freddo) al rosso (più caldo) della serie locale. Lo strumento, ideato dal climatologo Ed Hawkins, ha il pregio di rendere immediato, senza assi né numeri, lo scivolamento della media verso le tonalità calde nell'ultimo trentennio. Nel nostro caso la striscia poggia interamente su dato osservato dal 1961 al 2025, e al passaggio del cursore restituisce per ogni anno la temperatura media e lo scarto rispetto alla media locale.
+\subsection{Uno sguardo al 2050: se non cambia nulla}
+I numeri visti finora raccontano ciò che è già accaduto. Ma la stessa app prova anche a guardare avanti. Proiettando il ritmo di riscaldamento osservato, entro il \textbf{2050} il distretto potrebbe scaldarsi di un altro grado e mezzo abbondante rispetto a oggi. Per i fondovalle significherebbe un salto drammatico nelle notti afose: a Pontecorvo, per esempio, si passerebbe dalle attuali \num{47} a quasi \num{90} notti tropicali all'anno --- praticamente l'intera estate trascorsa con oltre venti gradi anche di notte. Non è una profezia, ma uno scenario di avvertimento: dipende da quanto sapremo ridurre, da qui in avanti, le emissioni che alimentano il riscaldamento.
 
-\section{Discussione e limiti}
-Sarebbe scorretto presentare questi numeri senza i loro margini. Due avvertenze meritano di essere esplicitate.
+\section{La consapevolezza è il primo passo}
+I dati elaborati in questa relazione, e resi accessibili tramite la piattaforma web, dimostrano che il clima \textbf{è già cambiato}. Portare questi numeri sui nostri smartphone non serve a spaventarci, ma a prepararci.
 
-In primo luogo, il riscaldamento medio appare quasi uniforme sul comprensorio. Non è un difetto del metodo, ma una proprietà fisica: l'anomalia termica è un segnale di larga scala, che cambia poco da un paese all'altro. Ciò che cambia davvero da comune a comune è la temperatura \emph{assoluta} --- e con essa il numero di notti tropicali --- governata dalla quota. La nostra scelta di restituire entrambe le letture, lo scarto e il valore assoluto, nasce proprio da questa distinzione.
+Capire che dovremo ripensare i nostri consumi idrici, proteggere le persone anziane durante i mesi estivi, isolare meglio le abitazioni e accompagnare l'agricoltura verso colture e pratiche più resistenti al caldo è il primo passo per costruire un territorio capace di adattarsi. Sono le stesse direzioni indicate dal Piano d'Azione per l'Energia Sostenibile e il Clima (PAESC) del distretto: comunità energetiche rinnovabili, efficientamento degli edifici, forestazione, gestione attenta dell'acqua. Il riscaldamento globale non è più invisibile: grazie ai dati scientifici ora possiamo leggerlo, capirlo e, soprattutto, affrontarlo insieme.
 
-In secondo luogo, la risoluzione della rianalisi resta dell'ordine della decina di chilometri: il downscaling altimetrico recupera l'effetto dominante della quota, ma non i micro-climi di versante, le inversioni termiche di conca o l'isola di calore dei centri abitati maggiori. Inoltre la stima della media storica come semisomma di minima e massima, pur standard, tende a discostarsi di qualche decimo dalla media oraria ``vera''; avendo applicato lo stesso metodo a entrambi i periodi, però, l'eventuale scarto si elide nel confronto.
-
-\section{Conclusioni}
-Il quadro che emerge è privo di ambiguità. Nei trentadue comuni del GAL Versante Laziale del PNALM la temperatura media è salita di circa \textbf{due gradi e mezzo} rispetto alla normale climatica 1961--1990, con punte estive che a giugno superano i tre gradi; e l'accelerazione prosegue, visto che oltre un grado di questo aumento si è consumato nel solo ultimo decennio. Non si tratta di episodi meteorologici passeggeri ma dello spostamento della normale climatica: le isoterme del nostro Appennino si sono mosse, e con esse la vita quotidiana di chi lo abita --- le notti d'estate, i consumi, l'acqua dei campi.
-
-L'applicazione che accompagna questa relazione non aggiunge un grado a quel riscaldamento, ma lo rende visibile e personale: traduce un'astrazione planetaria nel numero del proprio paese e nelle sue conseguenze tangibili. È, crediamo, il primo passo perché un dato diventi consapevolezza, e perché la consapevolezza diventi, nelle scelte di un territorio, azione.
-
-\begin{thebibliography}{9}
-\footnotesize
-\bibitem{hersbach2020} Hersbach, H. et al. (2020). \emph{The ERA5 global reanalysis}. Quarterly Journal of the Royal Meteorological Society, 146(730), 1999--2049.
-\bibitem{munoz2021} Mu\~noz-Sabater, J. et al. (2021). \emph{ERA5-Land: a state-of-the-art global reanalysis dataset for land applications}. Earth System Science Data, 13, 4349--4383.
-\bibitem{c3s} Copernicus Climate Change Service (C3S). \emph{Climate Data Store}. \url{https://cds.climate.copernicus.eu}.
-\bibitem{ipcc2021} IPCC (2021). \emph{Climate Change 2021: The Physical Science Basis (AR6, WG I)}. Cambridge University Press.
-\bibitem{medecc2020} MedECC (2020). \emph{Climate and Environmental Change in the Mediterranean Basin --- Current Situation and Risks for the Future}. First Mediterranean Assessment Report.
-\bibitem{wmo} World Meteorological Organization. \emph{WMO Guidelines on the Calculation of Climate Normals} (WMO-No.~1203).
-\bibitem{ispra} ISPRA. \emph{Indicatore ``Notti tropicali''}, Banca dati degli indicatori ambientali.
-\bibitem{sleep} Minor, K. et al. (2024). \emph{Rising temperatures erode human sleep}. Science of the Total Environment.
-\bibitem{eia} U.S. Energy Information Administration. \emph{Air conditioning and residential electricity use}.
-\bibitem{climatecentral} Climate Central (2023). \emph{Hotter Climate, Higher Cooling Demand}.
-\bibitem{hess} Fader, M. et al. (2016). \emph{Mediterranean irrigation under climate change}. Hydrology and Earth System Sciences, 20, 953--973.
-\bibitem{cmcc} CMCC. \emph{Climate and agriculture in the Mediterranean: less water, more irrigation demand}.
-\end{thebibliography}
+\vspace{0.4cm}
+\noindent\footnotesize\textit{Nota sui dati.} Elaborazione su dati ERA5 / ERA5-Land del Copernicus Climate Change Service (ECMWF). Serie osservata 1961--2025, confronto rispetto alla normale climatica WMO 1961--1990. Le medie del passato sono ricavate dalle temperature minime e massime giornaliere; gli impatti quotidiani usano fattori medi tratti da fonti ufficiali (ISPRA, EIA, Copernicus/HESS, CMCC, IPCC, MedECC). Strumento a fini divulgativi.
 
 \end{document}

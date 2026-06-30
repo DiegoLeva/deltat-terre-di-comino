@@ -54,9 +54,30 @@ export default function WarmingStripes({ comune }: { comune: Comune }) {
         )}
       </svg>
 
-      <div className="mt-1 flex justify-between text-[11px] text-slate">
-        <span>1950</span><span>1980</span><span>2011</span><span>oggi</span>
-      </div>
+      {(() => {
+        const first = data[0].year, last = data[data.length - 1].year;
+        const pos = (y: number) => ((y - first) / (last - first)) * 100;
+        const ticks = [
+          { y: first, label: String(first), align: "left" as const },
+          { y: 1980, label: "1980" },
+          { y: comune.today_year, label: "oggi" },
+          { y: last, label: String(last), align: "right" as const },
+        ];
+        return (
+          <div className="relative mt-1 h-4 text-[11px] text-slate">
+            {ticks.map((t) => (
+              <span key={t.label} className="absolute whitespace-nowrap"
+                style={
+                  t.align === "left" ? { left: 0 }
+                  : t.align === "right" ? { right: 0 }
+                  : { left: `${pos(t.y)}%`, transform: "translateX(-50%)" }
+                }>
+                {t.label}
+              </span>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* riga informativa che cambia al passaggio */}
       <div className="mt-3 rounded-lg bg-cloud/60 px-3 py-2 text-sm">
